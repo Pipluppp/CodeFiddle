@@ -8,7 +8,7 @@ export const LandingPage = () => {
   const navigate = useNavigate();
   const handleClick = () => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}`)
       .then((resp) => {
         navigate(`/playground/${resp.data.playgroundId}`);
       })

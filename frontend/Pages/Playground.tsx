@@ -31,7 +31,8 @@ export const Playground = () => {
 
   if (playgroundId) setFolderStructure(playgroundId);
 
-  const ws = new WebSocket("ws://localhost:3000/?playgroundId=" + playgroundId);
+  const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:3000";
+  const ws = new WebSocket(`${wsUrl}/?playgroundId=${playgroundId}`);
 
   ws.onopen = () => {
     setWs(ws);

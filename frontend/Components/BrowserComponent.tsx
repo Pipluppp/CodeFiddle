@@ -8,6 +8,8 @@ import portStore from "../Store/portStore";
 import shellSocketStore from "../Store/shellSocketStore";
 import websocketStore from "../Store/websocketStore";
 
+const containerHost = import.meta.env.VITE_CONTAINER_HOST || "localhost";
+
 export const BrowserComponent: React.FC = () => {
   const { playgroundId } = useParams();
 
@@ -43,7 +45,7 @@ export const BrowserComponent: React.FC = () => {
         ref={inputRef}
         bordered={false}
         prefix={<ReloadOutlined onClick={handleRefresh} />}
-        defaultValue={`http://localhost:${port}`}
+        defaultValue={`http://${containerHost}:${port}`}
         style={{
           width: "100%",
           backgroundColor: "#282a36",
@@ -55,7 +57,7 @@ export const BrowserComponent: React.FC = () => {
       <iframe
         frameBorder={0}
         ref={browser}
-        src={`http://localhost:${port}`}
+        src={`http://${containerHost}:${port}`}
         style={{ width: "100%", height: "97vh" }}
       />
     </Row>

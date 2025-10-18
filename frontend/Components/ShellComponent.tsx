@@ -15,8 +15,9 @@ export const ShellComponent = () => {
 
   const { playgroundId } = useParams();
 
+  const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:3000";
   const ws = new WebSocket(
-    "ws://localhost:3000/shell/?playgroundId=" + playgroundId
+    `${wsUrl}/shell/?playgroundId=${playgroundId}`
   );
 
   useEffect(() => {

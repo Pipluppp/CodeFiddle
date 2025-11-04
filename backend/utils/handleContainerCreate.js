@@ -11,7 +11,8 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
       AttachStderr: true,
       AttachStdin: true,
       AttachStdout: true,
-      Cmd: "/bin/bash".split(" "),
+      // Cmd: "/bin/bash".split(" "),
+      Cmd: ["/bin/sh", "-c", "chown -R codefiddle:codefiddle /home/codefiddle/code && /bin/bash"],
       Tty: true,
       Volumes: {
         "/home/codefiddle/code": {},

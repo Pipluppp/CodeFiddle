@@ -1,5 +1,6 @@
 FROM ubuntu:20.04
 RUN useradd -ms /bin/bash codefiddle
+RUN chown -R codefiddle:codefiddle /home/codefiddle/
 WORKDIR /home/codefiddle/
 RUN apt update && apt upgrade -y
 RUN apt install curl nano -y

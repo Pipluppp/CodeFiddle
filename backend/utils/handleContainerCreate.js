@@ -7,7 +7,7 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
   docker.createContainer(
     {
       Image: "codefiddle",
-      // name: playgroundId,
+      name: playgroundId,
       AttachStderr: true,
       AttachStdin: true,
       AttachStdout: true,

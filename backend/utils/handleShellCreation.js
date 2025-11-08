@@ -3,6 +3,9 @@ const processOutput = require("./processOutput");
 const BOOTSTRAP_DELAY_MS = 300;
 const BOOTSTRAP_COMMANDS = [
   'echo "Bootstrapping playground: installing dependencies and starting Vite dev server..."',
+  // Enable polling so Docker bind mounts on macOS/Windows propagate file changes to Vite.
+  "export CHOKIDAR_USEPOLLING=1",
+  "export CHOKIDAR_INTERVAL=300",
   "cd /home/codefiddle/code",
   "npm install",
   "npm run dev -- --host",

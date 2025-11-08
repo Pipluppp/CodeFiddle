@@ -22,6 +22,34 @@
     --active-overlay: rgba(255, 255, 255, 0.1);
     --preview-frame: #ffffff;
     --island-gap: 3px;
+    --scrollbar-size: 8px;
+    --scrollbar-track: #2b2b2b;
+    --scrollbar-thumb: #404040;
+    --scrollbar-thumb-hover: #505050;
+}
+
+.playground-background,
+.playground-background * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.playground-background ::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+}
+
+.playground-background ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+.playground-background ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: calc(var(--scrollbar-size) / 2);
+}
+
+.playground-background ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
 }
 
 .playground-background {
@@ -108,6 +136,8 @@
     background: var(--terminal-bg);
     border-radius: 6px;
     border: 1px solid var(--terminal-border);
+    display: flex;
+    padding: 0;
 }
 
 .island {
@@ -156,23 +186,6 @@
     flex: 1;
     overflow: auto;
     padding-right: 4px;
-}
-
-.sidebar-scroll::-webkit-scrollbar {
-    width: 8px;
-}
-
-.sidebar-scroll::-webkit-scrollbar-track {
-    background: var(--island-surface);
-}
-
-.sidebar-scroll::-webkit-scrollbar-thumb {
-    background: #404040;
-    border-radius: 4px;
-}
-
-.sidebar-scroll::-webkit-scrollbar-thumb:hover {
-    background: #505050;
 }
 
 .editor-island {
@@ -267,14 +280,58 @@
 .shell-terminal {
     flex: 1;
     width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .shell-terminal .xterm-viewport {
     background: transparent !important;
+    right: 0 !important;
+    margin-right: 0 !important;
+    padding-right: 0 !important;
 }
 
 .shell-terminal .xterm-screen canvas {
     border-radius: 0;
+}
+
+/* Monaco editor scrollbar overrides to mirror the terminal look */
+.playground-background .monaco-scrollable-element {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+
+.playground-background .monaco-scrollable-element>.scrollbar.vertical,
+.playground-background .monaco-editor .scrollbar.vertical {
+    width: var(--scrollbar-size) !important;
+    right: 0 !important;
+}
+
+.playground-background .monaco-scrollable-element>.scrollbar.horizontal,
+.playground-background .monaco-editor .scrollbar.horizontal {
+    height: var(--scrollbar-size) !important;
+    bottom: 0 !important;
+}
+
+.playground-background .monaco-scrollable-element>.scrollbar>.slider,
+.playground-background .monaco-editor .scrollbar>.slider {
+    border-radius: calc(var(--scrollbar-size) / 2) !important;
+    background: var(--scrollbar-thumb) !important;
+    opacity: 0.9 !important;
+}
+
+.playground-background .monaco-scrollable-element>.scrollbar>.slider:hover,
+.playground-background .monaco-scrollable-element>.scrollbar>.slider.active,
+.playground-background .monaco-editor .scrollbar>.slider:hover,
+.playground-background .monaco-editor .scrollbar>.slider.active {
+    background: var(--scrollbar-thumb-hover) !important;
+}
+
+.playground-background .monaco-scrollable-element>.scrollbar.corner {
+    width: var(--scrollbar-size) !important;
+    height: var(--scrollbar-size) !important;
+    background: var(--scrollbar-track) !important;
 }
 
 .preview-island {
@@ -529,24 +586,6 @@
 .context-menu__item:hover {
     background: var(--hover-overlay);
     color: var(--text-primary);
-}
-
-.playground-background ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.playground-background ::-webkit-scrollbar-track {
-    background: #2b2b2b;
-}
-
-.playground-background ::-webkit-scrollbar-thumb {
-    background: #404040;
-    border-radius: 4px;
-}
-
-.playground-background ::-webkit-scrollbar-thumb:hover {
-    background: #505050;
 }
 
 /* Structural spacing for Allotment panes */

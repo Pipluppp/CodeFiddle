@@ -102,6 +102,13 @@ export const EditorComponent = () => {
         fontFamily: "JetBrains Mono, 'Droid Sans Mono', monospace",
         minimap: { enabled: false },
         smoothScrolling: true,
+        scrollbar: {
+          vertical: "auto",
+          horizontal: "auto",
+          verticalScrollbarSize: 8,
+          horizontalScrollbarSize: 8,
+          useShadows: false,
+        },
         scrollBeyondLastLine: false,
         padding: { top: 16, bottom: 16 },
         automaticLayout: true,

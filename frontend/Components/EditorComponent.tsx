@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import Editor from "@monaco-editor/react";
+import { CodeiumEditor } from "@codeium/react-code-editor";
 
 import activeTabStore from "../Store/activeTabStore";
 import websocketStore from "../Store/websocketStore";
@@ -82,7 +82,7 @@ export const EditorComponent = () => {
   };
 
   return (
-    <Editor
+    <CodeiumEditor
       beforeMount={(monaco) => {
         monaco.editor.defineTheme("islands", islandTheme);
       }}

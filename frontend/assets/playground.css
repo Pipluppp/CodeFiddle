@@ -21,6 +21,7 @@
     --hover-overlay: rgba(255, 255, 255, 0.05);
     --active-overlay: rgba(255, 255, 255, 0.1);
     --preview-frame: #ffffff;
+    --island-gap: 3px;
 }
 
 .playground-background {
@@ -66,15 +67,20 @@
     display: flex;
     align-items: stretch;
     min-width: 0;
+    padding: var(--island-gap);
+    box-sizing: border-box;
 }
 
 .stage-slot--sidebar {
-    min-width: 220px;
-    max-width: 340px;
+    min-width: 60px;
+    /* Match Allotment pane minSize so the sidebar can collapse */
+    max-width: none;
+    /* Allow Allotment to grow the pane without hitting a hard cap */
 }
 
 .stage-slot--preview {
-    min-width: 260px;
+    min-width: 200px;
+    /* Keep in sync with preview pane minSize */
 }
 
 .stage-subslot {
@@ -82,10 +88,13 @@
     display: flex;
     align-items: stretch;
     min-height: 0;
+    padding: var(--island-gap);
+    box-sizing: border-box;
 }
 
 .stage-subslot--utility {
-    min-height: 200px;
+    min-height: 140px;
+    /* Match utility pane minSize to avoid sash sticking */
 }
 
 .utility-island .island-body {
@@ -542,7 +551,7 @@
 
 /* Structural spacing for Allotment panes */
 .playground-background [class*="splitViewView"] {
-    padding: 4px;
+    padding: 0;
     box-sizing: border-box;
     background: transparent;
     border: none !important;

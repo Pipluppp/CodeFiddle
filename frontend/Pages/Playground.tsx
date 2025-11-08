@@ -92,56 +92,58 @@ export const Playground = () => {
       <FolderModal />
       <FileModal />
       <div className="playground-background">
-        <Allotment
-          className="playground-stage"
-          defaultSizes={[23, 52, 25]}
-          minSize={180}
-        >
-          <div className="stage-slot stage-slot--sidebar">
-            <div className="island island--sidebar">
-              <div className="island-header">
-                <span>Project Files</span>
-              </div>
-              <div className="island-body sidebar-scroll">
-                <FolderStructureComponent />
+        <Allotment className="playground-stage" defaultSizes={[23, 52, 25]}>
+          <Allotment.Pane minSize={60}>
+            <div className="stage-slot stage-slot--sidebar">
+              <div className="island island--sidebar">
+                <div className="island-header">
+                  <span>Project Files</span>
+                </div>
+                <div className="island-body sidebar-scroll">
+                  <FolderStructureComponent />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="stage-slot stage-slot--editor">
-            <Allotment
-              vertical
-              defaultSizes={[70, 30]}
-              minSize={160}
-            >
-              <div className="stage-subslot stage-subslot--editor">
-                <div className="island editor-island">
-                  <EditorTabsComponent />
-                  <div className="editor-main">
-                    <div className="editor-body">
-                      <div className="editor-surface">
-                        <EditorComponent />
+          </Allotment.Pane>
+          <Allotment.Pane minSize={260}>
+            <div className="stage-slot stage-slot--editor">
+              <Allotment vertical defaultSizes={[70, 30]}>
+                <Allotment.Pane minSize={220}>
+                  <div className="stage-subslot stage-subslot--editor">
+                    <div className="island editor-island">
+                      <EditorTabsComponent />
+                      <div className="editor-main">
+                        <div className="editor-body">
+                          <div className="editor-surface">
+                            <EditorComponent />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="stage-subslot stage-subslot--utility">
-                <div className="island utility-island">
-                  <div className="island-header island-header--compact">
-                    <span>Console</span>
+                </Allotment.Pane>
+                <Allotment.Pane minSize={140}>
+                  <div className="stage-subslot stage-subslot--utility">
+                    <div className="island utility-island">
+                      <div className="island-header island-header--compact">
+                        <span>Console</span>
+                      </div>
+                      <div className="island-body utility-body">
+                        <ShellComponent />
+                      </div>
+                    </div>
                   </div>
-                  <div className="island-body utility-body">
-                    <ShellComponent />
-                  </div>
-                </div>
-              </div>
-            </Allotment>
-          </div>
-          <div className="stage-slot stage-slot--preview">
-            <div className="island preview-island">
-              <BrowserComponent />
+                </Allotment.Pane>
+              </Allotment>
             </div>
-          </div>
+          </Allotment.Pane>
+          <Allotment.Pane minSize={200}>
+            <div className="stage-slot stage-slot--preview">
+              <div className="island preview-island">
+                <BrowserComponent />
+              </div>
+            </div>
+          </Allotment.Pane>
         </Allotment>
       </div>
     </>

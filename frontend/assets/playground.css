@@ -545,6 +545,11 @@
     padding: 4px;
     box-sizing: border-box;
     background: transparent;
+    border: none !important;
+}
+
+.playground-background [class*="splitViewView"]::before {
+    display: none !important;
 }
 
 /* Keep the sash purely functional */

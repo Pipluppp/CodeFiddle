@@ -1,12 +1,13 @@
 import { create } from "zustand";
 
 import { FolderStructureStoreState } from "../Types/types";
+import { buildApiUrl } from "../src/utils/api";
 
 const folderStructureStore = create<FolderStructureStoreState>()((set) => ({
   folderStructure: null,
   setFolderStructure: async (playgroundId) => {
     const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/tree/${playgroundId}`
+      buildApiUrl(`/tree/${playgroundId}`)
     );
     set({ folderStructure: await response.json() });
   },

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Row, Col, Button } from "antd";
+import { buildApiUrl } from "../src/utils/api";
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const handleClick = () => {
     axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}`)
+      .get(buildApiUrl())
       .then((resp) => {
         navigate(`/playground/${resp.data.playgroundId}`);
       })

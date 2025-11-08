@@ -46,7 +46,9 @@ export interface FolderStructureStoreState {
 
 export interface PortStoreState {
   port: number | null;
-  setPort: (port: number) => void;
+  error: string | null;
+  setPort: (port: number | null) => void;
+  setError: (message: string | null) => void;
 }
 
 export interface ShellSocketStoreState {
@@ -56,7 +58,7 @@ export interface ShellSocketStoreState {
 
 export interface WebsocketStoreState {
   ws: WebSocket | null;
-  setWs: (ws: WebSocket) => void;
+  setWs: (ws: WebSocket | null) => void;
 }
 
 /******************************************/

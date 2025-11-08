@@ -25,6 +25,7 @@ export const Playground = () => {
   const setWs = websocketStore((state) => state.setWs);
   const setActiveTab = activeTabStore((state) => state.setActiveTab);
   const setPort = portStore((state) => state.setPort);
+  const setPortError = portStore((state) => state.setError);
   const setPath = createFileOrFolderStore((state) => state.setPath);
   const setIsFile = createFileOrFolderStore((state) => state.setIsFile);
 
@@ -32,6 +33,9 @@ export const Playground = () => {
   useEffect(() => {
     // Only proceed if we have a valid playgroundId from the URL.
     if (playgroundId) {
+      setPort(null);
+      setPortError(null);
+
       // 1. Fetch the initial folder structure.
       setFolderStructure(playgroundId);
 
@@ -52,6 +56,12 @@ export const Playground = () => {
             case "registerPort":
               const port = data.payload.port;
               setPort(port);
+              setPortError(null);
+              break;
+            case "devServerError":
+              const message = data.payload.message;
+              setPort(null);
+              setPortError(message);
               break;
             case "validateFolderStructure":
               // Re-fetch the folder structure if the backend detects a change
@@ -70,6 +80,8 @@ export const Playground = () => {
           ws.close();
         }
         setWs(null); // Clear the websocket from the global store
+        setPort(null);
+        setPortError(null);
       };
     }
   }, [playgroundId]); // The dependency array ensures this code only runs when playgroundId changes.

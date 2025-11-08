@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 //@ts-ignore:disable-next-line
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import "../assets/playground.css";
 import { BrowserComponent } from "../Components/BrowserComponent";
 import { EditorComponent } from "../Components/EditorComponent";
 import { FolderStructureComponent } from "../Components/FolderStructureComponent";
@@ -90,42 +91,58 @@ export const Playground = () => {
     <>
       <FolderModal />
       <FileModal />
-      <div style={{ display: "flex" }}>
-        <div
-          className="folder-structure-parent"
-          style={{
-            paddingRight: "10px",
-            paddingTop: "0.2vh",
-            minWidth: "250px",
-            maxWidth: "25%",
-            height: "99.8vh",
-            backgroundColor: "#22212c",
-            fontFamily: "Roboto, sans-serif",
-            overflow: "auto",
-          }}
+      <div className="playground-background">
+        <Allotment
+          className="playground-stage"
+          defaultSizes={[23, 52, 25]}
+          minSize={180}
         >
-          <FolderStructureComponent />
-        </div>
-        <div style={{ height: "100vh", width: "100vw" }}>
-          <Allotment>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "#282a36",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <div style={{ borderBottom: "1px solid #bd93f9" }}>
-                <EditorTabsComponent />
-                <EditorComponent />
+          <div className="stage-slot stage-slot--sidebar">
+            <div className="island island--sidebar">
+              <div className="island-header">
+                <span>Project Files</span>
               </div>
-              <ShellComponent />
+              <div className="island-body sidebar-scroll">
+                <FolderStructureComponent />
+              </div>
             </div>
-            <BrowserComponent />
-          </Allotment>
-        </div>
+          </div>
+          <div className="stage-slot stage-slot--editor">
+            <Allotment
+              vertical
+              defaultSizes={[70, 30]}
+              minSize={160}
+            >
+              <div className="stage-subslot stage-subslot--editor">
+                <div className="island editor-island">
+                  <EditorTabsComponent />
+                  <div className="editor-main">
+                    <div className="editor-body">
+                      <div className="editor-surface">
+                        <EditorComponent />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="stage-subslot stage-subslot--utility">
+                <div className="island utility-island">
+                  <div className="island-header island-header--compact">
+                    <span>Console</span>
+                  </div>
+                  <div className="island-body utility-body">
+                    <ShellComponent />
+                  </div>
+                </div>
+              </div>
+            </Allotment>
+          </div>
+          <div className="stage-slot stage-slot--preview">
+            <div className="island preview-island">
+              <BrowserComponent />
+            </div>
+          </div>
+        </Allotment>
       </div>
     </>
   );

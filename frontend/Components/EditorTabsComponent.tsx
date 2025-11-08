@@ -4,27 +4,23 @@ import availableTabsStore from "../Store/availableTabsStore";
 
 export const EditorTabsComponent = () => {
   const availableTabs = availableTabsStore((state) => state.availableTabs);
+  const entries = Object.entries(availableTabs);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        paddingTop: "5px",
-        paddingBottom: "5px",
-        height: "2vh",
-        borderBottom: "1px solid #1f1f1f",
-      }}
-    >
-      {Object.keys(availableTabs).length > 0 &&
-        Object.entries(availableTabs).map((entries) => {
-          return (
-            <EditorButtonComponent
-              path={entries[0]}
-              isActive={entries[1]}
-              key={entries[0]}
-            />
-          );
-        })}
+    <div className="editor-tabs-bar">
+      {entries.length > 0 ? (
+        entries.map(([path, isActive]) => (
+          <EditorButtonComponent
+            path={path}
+            isActive={isActive}
+            key={path}
+          />
+        ))
+      ) : (
+        <span className="editor-tabs-bar-empty">
+          Open a file from the tree to start editing
+        </span>
+      )}
     </div>
   );
 };

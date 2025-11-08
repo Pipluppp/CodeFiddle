@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 
-import { Row, Input } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 
 import portStore from "../Store/portStore";
@@ -19,16 +18,13 @@ export const BrowserComponent: React.FC = () => {
   const ws = websocketStore((state) => state.ws);
 
   const browser = useRef<HTMLIFrameElement>(null);
-  const inputRef = useRef(null);
 
   const handleRefresh = () => {
-    if (browser.current) browser.current.src = browser.current.src;
+    if (!browser.current || !port) {
+      return;
+    }
+    browser.current.src = browser.current.src;
   };
-
-  useEffect(() => {
-    //@ts-ignore:disable-next-line
-    if (port && inputRef.current) inputRef.current.input.style.color = "white";
-  }, [port]);
 
   useEffect(() => {
     if (!ws || !wsForShell || !playgroundId || port || error) {
@@ -49,79 +45,79 @@ export const BrowserComponent: React.FC = () => {
     ws.send(JSON.stringify(message));
   }, [playgroundId, ws, wsForShell, port, error]);
 
-  if (error) {
-    return (
-      <Row
-        style={{
-          height: "97vh",
-          width: "100%",
-          backgroundColor: "#22212c",
-          color: "#ff5555",
-          fontFamily: "Ubuntu Mono, monospace",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "0 24px",
-        }}
-      >
-        <div>
-          <h3 style={{ color: "#ff5555" }}>Preview failed to start</h3>
-          <p style={{ color: "#f8f8f2" }}>{error}</p>
-          <p style={{ color: "#f1fa8c" }}>
-            Check the terminal output for details or retry creating the playground.
-          </p>
-        </div>
-      </Row>
-    );
-  }
+  const previewUrl = port ? `http://${containerHost}:${port}` : "";
+  const addressDisplay = port
+    ? previewUrl
+    : error
+    ? "Preview unavailable"
+    : "Starting dev server...";
 
-  if (!port) {
-    return (
-      <Row
-        style={{
-          height: "97vh",
-          width: "100%",
-          backgroundColor: "#22212c",
-          color: "#f8f8f2",
-          fontFamily: "Ubuntu Mono, monospace",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "0 24px",
-        }}
-      >
-        <div>
-          <h3 style={{ color: "#8be9fd" }}>Starting your preview...</h3>
-          <p>
-            Installing dependencies and booting the Vite dev server inside the
-            container. This might take a minute on the first run.
-          </p>
+  const renderContent = () => {
+    if (error) {
+      return (
+        <div className="preview-state preview-state--error">
+          <div>
+            <h3>Preview failed to start</h3>
+            <p>{error}</p>
+            <p>Check the console output for more details.</p>
+          </div>
         </div>
-      </Row>
-    );
-  }
+      );
+    }
 
-  return (
-    <Row style={{ backgroundColor: "#22212c" }}>
-      <Input
-        ref={inputRef}
-        bordered={false}
-        prefix={<ReloadOutlined onClick={handleRefresh} />}
-        defaultValue={`http://${containerHost}:${port}`}
-        style={{
-          width: "100%",
-          backgroundColor: "#282a36",
-          color: "white",
-          height: "30px",
-          fontFamily: "Ubuntu Mono, monospace",
-        }}
-      />
+    if (!port) {
+      return (
+        <div className="preview-state preview-state--pending">
+          <div>
+            <h3>Starting your preview...</h3>
+            <p>
+              Installing dependencies and booting the Vite dev server inside the
+              container. This might take a minute on the first run.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
       <iframe
+        className="preview-frame"
         frameBorder={0}
         ref={browser}
-        src={`http://${containerHost}:${port}`}
-        style={{ width: "100%", height: "97vh" }}
+        src={previewUrl}
+        title="Sandbox Preview"
       />
-    </Row>
+    );
+  };
+
+  return (
+    <div className="preview-pane">
+      <div className="preview-toolbar">
+        <span className="preview-title">Preview</span>
+        <div className="preview-controls">
+          <button
+            type="button"
+            className="preview-reload"
+            onClick={handleRefresh}
+            aria-label="Reload preview"
+            disabled={!port}
+          >
+            <ReloadOutlined />
+          </button>
+          <div className="preview-address">
+            <input
+              className="preview-address-input"
+              value={addressDisplay}
+              readOnly
+              aria-label="Preview address"
+              spellCheck={false}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="preview-frame-wrapper">
+        <div className="preview-frame-shell">{renderContent()}</div>
+      </div>
+    </div>
   );
 };

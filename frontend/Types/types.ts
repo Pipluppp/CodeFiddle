@@ -53,7 +53,7 @@ export interface PortStoreState {
 
 export interface ShellSocketStoreState {
   wsForShell: WebSocket | null;
-  setWs: (ws: WebSocket) => void;
+  setWs: (ws: WebSocket | null) => void;
 }
 
 export interface WebsocketStoreState {

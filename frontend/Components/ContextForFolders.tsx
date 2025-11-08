@@ -26,53 +26,26 @@ export const ContextForFolders = ({
       onMouseLeave={() => {
         setOpen(false);
       }}
+      className="context-menu"
       style={{
-        width: "100px",
-        position: "fixed",
-        fontSize: "0px",
         left: x,
         top: y,
-        border: "1px solid black",
       }}
     >
       <button
         onClick={createDirectory}
-        style={{
-          color: "white",
-          backgroundColor: "#22212c",
-          border: "none",
-          outline: "none",
-          width: "100%",
-          height: "30px",
-          cursor: "pointer",
-        }}
+        className="context-menu__item"
       >
         Create Folder
       </button>
       <button
         onClick={createFile}
-        style={{
-          color: "white",
-          backgroundColor: "#22212c",
-          border: "none",
-          outline: "none",
-          width: "100%",
-          height: "30px",
-          cursor: "pointer",
-        }}
+        className="context-menu__item"
       >
         Create File
       </button>
       <button
-        style={{
-          color: "white",
-          backgroundColor: "#22212c",
-          border: "none",
-          outline: "none",
-          width: "100%",
-          height: "30px",
-          cursor: "pointer",
-        }}
+        className="context-menu__item"
       >
         Delete Folder
       </button>

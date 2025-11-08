@@ -11,55 +11,68 @@ import shellSocketStore from "../Store/shellSocketStore";
 export const ShellComponent = () => {
   const setWs = shellSocketStore((state) => state.setWs);
 
-  const terminal = useRef(null);
+  const terminal = useRef<HTMLDivElement | null>(null);
 
   const { playgroundId } = useParams();
 
-  const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:3000";
-  const ws = new WebSocket(
-    `${wsUrl}/shell/?playgroundId=${playgroundId}`
-  );
-
   useEffect(() => {
+    if (!playgroundId) {
+      return;
+    }
+
+    const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:3000";
+    const ws = new WebSocket(`${wsUrl}/shell/?playgroundId=${playgroundId}`);
     const term = new Terminal({
       cursorBlink: true,
       convertEol: true,
       theme: {
-        background: "#282a36",
-        foreground: "#f8f8f2",
-        cyan: "#8be9fd",
-        green: "#50fa7b",
-        yellow: "#f1fa8c",
-        red: "#ff5555",
-        cursor: "#f8f8f2",
-        cursorAccent: "#282a36",
+        background: "#2b2b2b",
+        foreground: "#cccccc",
+        cursor: "#3574f0",
+        cursorAccent: "#1e1e1e",
+        black: "#1e1e1e",
+        red: "#f48771",
+        green: "#62a462",
+        yellow: "#cc7832",
+        blue: "#3574f0",
+        magenta: "#c792ea",
+        cyan: "#6897bb",
+        white: "#f5f5f5",
+        brightBlack: "#2f2f2f",
+        brightWhite: "#ffffff",
       },
-      fontSize: 16,
-      fontFamily: "Ubuntu Mono, monospace",
+      fontSize: 13,
+      fontFamily: "JetBrains Mono, 'Droid Sans Mono', monospace",
+      scrollback: 5000,
     });
-    term.open(terminal.current!);
-    let fitAddon = new FitAddon();
+
+    if (terminal.current) {
+      term.open(terminal.current);
+    }
+
+    const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
+
+    const handleResize = () => {
+      fitAddon.fit();
+    };
+
     fitAddon.fit();
+    window.addEventListener("resize", handleResize);
+
     ws.onopen = () => {
       const attachAddon = new AttachAddon(ws);
       term.loadAddon(attachAddon);
       setWs(ws);
     };
+
     return () => {
+      window.removeEventListener("resize", handleResize);
+      setWs(null);
+      ws.close();
       term.dispose();
     };
-  }, []);
+  }, [playgroundId, setWs]);
 
-  return (
-    <div
-      style={{
-        height: "23vh",
-        overflow: "auto",
-      }}
-      ref={terminal}
-      className="terminal"
-      id="terminal-container"
-    />
-  );
+  return <div ref={terminal} className="shell-terminal" id="terminal-container" />;
 };

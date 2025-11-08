@@ -66,20 +66,14 @@ const Tree = ({
   };
 
   return (
-    <div style={{ paddingLeft: "10px", color: "white" }}>
+    <div className="folder-tree">
       {data.children ? (
         <button
           onContextMenu={(e) => handleContextForFolders(e, data.path)}
           onClick={() => toggleVisibility(data.name)}
-          style={{
-            paddingTop: "6px",
-            fontSize: "15px",
-            backgroundColor: "transparent",
-            color: "white",
-            outline: "none",
-            border: "none",
-            cursor: "pointer",
-          }}
+          className={`folder-tree__folderButton ${
+            visible[data.name] ? "is-open" : ""
+          }`}
         >
           <img
             src={visible[data.name] ? Collapse : Expand}
@@ -90,25 +84,19 @@ const Tree = ({
           {data.name}
         </button>
       ) : (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="folder-tree__fileRow">
           {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
             IconPack[data.name.split(".").pop()!]
           ) : (
             <AiFillFile
-              color="gray"
+              className="folder-tree__fileIcon"
+              color="currentColor"
               display="block"
-              style={{ marginTop: "7px" }}
             />
           )}
           <p
             onContextMenu={(e) => handleContextForFiles(e, data.path)}
             onDoubleClick={() => handleDoubleClick(data.path)}
-            style={{
-              fontSize: "15px",
-              cursor: "pointer",
-              marginLeft: "5px",
-              paddingTop: "6px",
-            }}
           >
             {data.name}
           </p>

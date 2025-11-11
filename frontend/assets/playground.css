@@ -715,7 +715,7 @@
     position: absolute;
     inset: 24px;
     background: rgba(18, 22, 33, 0.72);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(30px);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,11 +1,21 @@
 {
-  "name": "node-template",
+  "name": "codefiddle-node",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "CodeFiddle's Node.js playground template.",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon --legacy-watch index.js"
+    "start": "node --watch index.js",
+    "dev": "node --watch index.js"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+  "keywords": [
+    "node",
+    "javascript",
+    "playground"
+  ],
+  "author": "CodeFiddle",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

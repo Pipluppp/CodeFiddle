@@ -63,6 +63,17 @@ export interface WebsocketStoreState {
 
 /******************************************/
 
+export interface PlaygroundTemplate {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+  hasPreview: boolean;
+}
+
+/******************************************/
+
 export interface IconPackInterface {
   [key: string]: ReactElement;
 }

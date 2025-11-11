@@ -79,7 +79,10 @@ wsForMonaco.on("connection", (ws, req) => {
 });
 
 wsForShell.on("connection", (ws, req, container) => {
-  handleShellCreation(container, ws);
+  const params = querystring.parse(req.url.split("?")[1]);
+  const playgroundId = params.playgroundId;
+
+  handleShellCreation(container, ws, playgroundId);
   ws.on("close", () => {
     container.remove({ force: true }, (err, data) => {
       if (err) console.log(err);

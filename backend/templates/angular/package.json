@@ -1,0 +1,25 @@
+{
+  "name": "angular-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 4200",
+    "build": "vite build",
+    "preview": "vite preview --host --port 4200"
+  },
+  "dependencies": {
+    "@angular/common": "^17.3.8",
+    "@angular/compiler": "^17.3.8",
+    "@angular/core": "^17.3.8",
+    "@angular/platform-browser": "^17.3.8",
+    "rxjs": "^7.8.1",
+    "zone.js": "^0.14.4"
+  },
+  "devDependencies": {
+    "@analogjs/vite-plugin-angular": "^1.10.1",
+    "@angular/compiler-cli": "^17.3.8",
+    "typescript": "^5.4.5",
+    "vite": "^5.4.0"
+  }
+}

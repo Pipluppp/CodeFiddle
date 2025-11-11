@@ -1,0 +1,11 @@
+{
+  "name": "node-template",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon --legacy-watch index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

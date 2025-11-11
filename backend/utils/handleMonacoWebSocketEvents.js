@@ -3,13 +3,14 @@ const http = require("http");
 
 const Docker = require("dockerode");
 
+const getTemplateForPlayground = require("./getTemplateForPlayground");
+
 const docker = new Docker();
 
-const DEV_SERVER_PRIVATE_PORT = 5173;
-const DEV_SERVER_TIMEOUT_MS = Number(
+const DEFAULT_DEV_SERVER_TIMEOUT_MS = Number(
   process.env.DEV_SERVER_BOOT_TIMEOUT_MS || 180000
 );
-const DEV_SERVER_POLL_INTERVAL_MS = Number(
+const DEFAULT_DEV_SERVER_POLL_INTERVAL_MS = Number(
   process.env.DEV_SERVER_BOOT_POLL_INTERVAL_MS || 1500
 );
 const CONTAINER_HOST = process.env.CONTAINER_HOST || "127.0.0.1";
@@ -19,13 +20,13 @@ const sleep = (ms) =>
     setTimeout(resolve, ms);
   });
 
-const isServerReachable = (host, port) =>
+const isServerReachable = (host, port, path = "/") =>
   new Promise((resolve) => {
     const request = http.get(
       {
         host,
         port,
-        path: "/",
+        path,
         timeout: 2000,
       },
       (response) => {
@@ -41,15 +42,21 @@ const isServerReachable = (host, port) =>
     });
   });
 
-const waitForDevServer = async (host, port) => {
-  const deadline = Date.now() + DEV_SERVER_TIMEOUT_MS;
+const waitForDevServer = async (
+  host,
+  port,
+  path,
+  timeoutMs = DEFAULT_DEV_SERVER_TIMEOUT_MS,
+  pollIntervalMs = DEFAULT_DEV_SERVER_POLL_INTERVAL_MS
+) => {
+  const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
-    const reachable = await isServerReachable(host, port);
+    const reachable = await isServerReachable(host, port, path);
     if (reachable) {
       return;
     }
-    await sleep(DEV_SERVER_POLL_INTERVAL_MS);
+    await sleep(pollIntervalMs);
   }
 
   throw new Error(`Timed out waiting for dev server on ${host}:${port}`);
@@ -177,9 +184,9 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
       });
       break;
     case "registerPort": {
-      const name = data;
+      const playgroundId = data;
 
-      if (!name) {
+      if (!playgroundId) {
         const errMessage = {
           type: "devServerError",
           payload: {
@@ -190,7 +197,29 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
         break;
       }
 
-      docker.listContainers({ name: name }, async (err, containers) => {
+      const template = getTemplateForPlayground(playgroundId);
+      const previewConfig = template?.preview || {};
+
+      if (!previewConfig.enabled || !previewConfig.port) {
+        const errMessage = {
+          type: "devServerError",
+          payload: {
+            message:
+              `${template?.title || "Selected"} template does not expose a browser preview. Use the console to interact with your project.`,
+          },
+        };
+        ws.send(JSON.stringify(errMessage));
+        break;
+      }
+
+      const privatePort = previewConfig.port;
+      const healthCheckPath = previewConfig.healthCheckPath || "/";
+      const timeoutMs =
+        previewConfig.timeoutMs || DEFAULT_DEV_SERVER_TIMEOUT_MS;
+      const pollIntervalMs =
+        previewConfig.pollIntervalMs || DEFAULT_DEV_SERVER_POLL_INTERVAL_MS;
+
+      docker.listContainers({ name: playgroundId }, async (err, containers) => {
         if (err) {
           console.log(err);
           const errMessage = {
@@ -217,7 +246,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
         const containerDetails = containers[0];
         const portDetails = containerDetails.Ports.find(
           (port) =>
-            port.PrivatePort === DEV_SERVER_PRIVATE_PORT && port.Type === "tcp"
+            port.PrivatePort === privatePort && port.Type === "tcp"
         ) || containerDetails.Ports.find((port) => port.PublicPort);
 
         if (!portDetails || !portDetails.PublicPort) {
@@ -234,7 +263,13 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
         const publicPort = portDetails.PublicPort;
 
         try {
-          await waitForDevServer(CONTAINER_HOST, publicPort);
+          await waitForDevServer(
+            CONTAINER_HOST,
+            publicPort,
+            healthCheckPath,
+            timeoutMs,
+            pollIntervalMs
+          );
           const successMessage = {
             type: "registerPort",
             payload: {
@@ -248,7 +283,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
             type: "devServerError",
             payload: {
               message:
-                "Timed out while waiting for the preview server. Check the terminal output for details.",
+                `Timed out while waiting for the ${template?.title || "project"} preview server. Check the terminal output for details.`,
             },
           };
           ws.send(JSON.stringify(errMessage));

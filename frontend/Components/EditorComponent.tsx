@@ -4,6 +4,82 @@ import { CodeiumEditor } from "@codeium/react-code-editor";
 
 import activeTabStore from "../Store/activeTabStore";
 import websocketStore from "../Store/websocketStore";
+import { registerPlaygroundLanguages } from "../src/utils/registerPlaygroundLanguages";
+
+const detectLanguage = (path: string | undefined): string | undefined => {
+  if (!path) {
+    return undefined;
+  }
+
+  const normalized = path.toLowerCase();
+
+  if (normalized.endsWith(".tsx") || normalized.endsWith(".ts")) {
+    return "typescript";
+  }
+
+  if (
+    normalized.endsWith(".jsx") ||
+    normalized.endsWith(".js") ||
+    normalized.endsWith(".cjs") ||
+    normalized.endsWith(".mjs")
+  ) {
+    return "javascript";
+  }
+
+  if (normalized.endsWith(".json")) {
+    return "json";
+  }
+
+  if (normalized.endsWith(".css")) {
+    return "css";
+  }
+
+  if (normalized.endsWith(".scss")) {
+    return "scss";
+  }
+
+  if (normalized.endsWith(".html") || normalized.endsWith(".htm")) {
+    return "html";
+  }
+
+  if (normalized.endsWith(".vue")) {
+    return "vue";
+  }
+
+  if (normalized.endsWith(".svelte")) {
+    return "svelte";
+  }
+
+  if (normalized.endsWith(".md") || normalized.endsWith(".markdown")) {
+    return "markdown";
+  }
+
+  if (normalized.endsWith(".yaml") || normalized.endsWith(".yml")) {
+    return "yaml";
+  }
+
+  if (normalized.endsWith(".py")) {
+    return "python";
+  }
+
+  if (normalized.endsWith(".rb")) {
+    return "ruby";
+  }
+
+  if (normalized.endsWith(".go")) {
+    return "go";
+  }
+
+  if (normalized.endsWith(".rs")) {
+    return "rust";
+  }
+
+  if (normalized.endsWith(".java")) {
+    return "java";
+  }
+
+  return undefined;
+};
 
 const islandTheme = {
   base: "vs-dark" as const,
@@ -84,6 +160,7 @@ export const EditorComponent = () => {
   return (
     <CodeiumEditor
       beforeMount={(monaco) => {
+        registerPlaygroundLanguages(monaco);
         monaco.editor.defineTheme("islands", islandTheme);
       }}
       theme="islands"
@@ -91,7 +168,7 @@ export const EditorComponent = () => {
       height="100%"
       width="100%"
       path={activeTab ? activeTab.path : ""}
-      defaultLanguage={undefined}
+  language={detectLanguage(activeTab?.path) ?? "plaintext"}
       value={
         activeTab ? activeTab.value ?? "" : "Open a file to start editing"
       }

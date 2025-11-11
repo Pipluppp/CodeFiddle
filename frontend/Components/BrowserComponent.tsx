@@ -50,7 +50,7 @@ export const BrowserComponent: React.FC = () => {
     ? previewUrl
     : error
     ? "Preview unavailable"
-    : "Starting dev server...";
+    : "Starting environment...";
 
   const renderContent = () => {
     if (error) {
@@ -71,8 +71,8 @@ export const BrowserComponent: React.FC = () => {
           <div>
             <h3>Starting your preview...</h3>
             <p>
-              Installing dependencies and booting the Vite dev server inside the
-              container. This might take a minute on the first run.
+              Installing dependencies and preparing the container. This can
+              take a minute on the first run, especially for larger templates.
             </p>
           </div>
         </div>

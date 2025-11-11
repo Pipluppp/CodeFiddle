@@ -1,26 +1,39 @@
 const processOutput = require("./processOutput");
+const getTemplateForPlayground = require("./getTemplateForPlayground");
 
-const BOOTSTRAP_DELAY_MS = 300;
-const BOOTSTRAP_COMMANDS = [
-  'echo "Bootstrapping playground: installing dependencies and starting Vite dev server..."',
-  // Enable polling so Docker bind mounts on macOS/Windows propagate file changes to Vite.
+const FALLBACK_BOOTSTRAP_DELAY_MS = 300;
+const FALLBACK_BOOTSTRAP_COMMANDS = [
+  'echo "Bootstrapping playground: installing dependencies and starting the dev server..."',
   "export CHOKIDAR_USEPOLLING=1",
   "export CHOKIDAR_INTERVAL=300",
   "cd /home/codefiddle/code",
   "npm install",
-  "npm run dev -- --host",
+  "npm run dev",
 ];
 
-const bootstrapDevServer = (stream) => {
+const bootstrapDevServer = (stream, template) => {
+  const shellConfig = template?.shell;
+
+  if (!shellConfig?.autoBootstrap) {
+    return;
+  }
+
+  const commands = shellConfig.commands?.length
+    ? shellConfig.commands
+    : FALLBACK_BOOTSTRAP_COMMANDS;
+  const delay = shellConfig.bootstrapDelayMs ?? FALLBACK_BOOTSTRAP_DELAY_MS;
+
   setTimeout(() => {
-    // Run the usual setup commands automatically so the preview starts without manual input.
-    BOOTSTRAP_COMMANDS.forEach((command) => {
+    commands.forEach((command) => {
       stream.write(`${command}\n`);
     });
-  }, BOOTSTRAP_DELAY_MS);
+  }, delay);
 };
 
-const handleShellCreation = (container, ws) => {
+const handleShellCreation = (container, ws, playgroundId) => {
+  const resolvedPlaygroundId = playgroundId || container?.name?.replace(/^\//, "");
+  const template = getTemplateForPlayground(resolvedPlaygroundId);
+
   container.exec(
     {
       Cmd: ["/bin/bash"],
@@ -50,7 +63,7 @@ const handleShellCreation = (container, ws) => {
           }
 
           processOutput(stream, ws);
-          bootstrapDevServer(stream);
+          bootstrapDevServer(stream, template);
 
           ws.on("message", (message) => {
             stream.write(message);

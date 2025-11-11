@@ -1,5 +1,5 @@
 <script>
-  let count = 0;
+  let count = $state(0);
 
   const guides = [
     { label: "Svelte Tutorial", href: "https://svelte.dev/tutorial" },
@@ -16,7 +16,7 @@
       Edit <code>src/App.svelte</code> and save to see the preview update
       instantly. Try clicking the button below to watch state changes in action.
     </p>
-    <button class="cta" on:click={() => (count += 1)}>
+  <button class="cta" onclick={() => (count += 1)}>
       Count is {count}
     </button>
     <p class="hint">

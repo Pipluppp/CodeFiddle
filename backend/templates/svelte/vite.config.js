@@ -1,8 +1,14 @@
-import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { defineConfig } from "vite"
+import { svelte } from "@sveltejs/vite-plugin-svelte"
 
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [
+    svelte({
+      compilerOptions: {
+        runes: true,
+      },
+    }),
+  ],
   server: {
     host: true,
     port: 5173,
@@ -11,4 +17,4 @@ export default defineConfig({
     host: true,
     port: 5173,
   },
-});
+})

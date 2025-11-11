@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 
-import CodeFiddleLogo from "./assets/codefiddle-badge.svg";
 import VueLogo from "./assets/vue.svg";
 
 const count = ref(0);
@@ -18,8 +17,6 @@ const resources = [
     <header class="hero">
       <div class="logo-stack">
         <img class="logo" :src="VueLogo" alt="Vue logo" />
-        <span class="plus">+</span>
-        <img class="logo" :src="CodeFiddleLogo" alt="CodeFiddle logo" />
       </div>
       <h1>Vue + Vite</h1>
       <p class="tagline">

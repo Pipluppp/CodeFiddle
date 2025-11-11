@@ -24,11 +24,14 @@ const Tree = ({
   setContextForFileOpen,
   setContextForFolderOpen,
   setPath,
+  depth,
 }: TreeProps) => {
   const [visible, setVisible] = useState<VisibleState>({});
 
-  const toggleVisibility = (name: string) => {
-    setVisible({ ...visible, [name]: !visible[name] });
+  const nodeKey = data.path || data.name;
+
+  const toggleVisibility = (key: string) => {
+    setVisible({ ...visible, [key]: !visible[key] });
   };
 
   const handleDoubleClick = (path: string) => {
@@ -70,13 +73,14 @@ const Tree = ({
       {data.children ? (
         <button
           onContextMenu={(e) => handleContextForFolders(e, data.path)}
-          onClick={() => toggleVisibility(data.name)}
+          onClick={() => toggleVisibility(nodeKey)}
           className={`folder-tree__folderButton ${
-            visible[data.name] ? "is-open" : ""
+            visible[nodeKey] ? "is-open" : ""
           }`}
+          style={{ paddingLeft: `${depth * 18 + 8}px` }}
         >
           <img
-            src={visible[data.name] ? Collapse : Expand}
+            src={visible[nodeKey] ? Collapse : Expand}
             height="10px"
             width="10px"
           />
@@ -84,7 +88,10 @@ const Tree = ({
           {data.name}
         </button>
       ) : (
-        <div className="folder-tree__fileRow">
+        <div
+          className="folder-tree__fileRow"
+          style={{ paddingLeft: `${depth * 18 + 32}px` }}
+        >
           {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
             IconPack[data.name.split(".").pop()!]
           ) : (
@@ -102,11 +109,11 @@ const Tree = ({
           </p>
         </div>
       )}
-      {visible[data.name] &&
+      {visible[nodeKey] &&
         data.children &&
         data.children.map((child) => (
           <Tree
-            key={child.name}
+            key={child.path}
             data={child}
             ws={ws}
             addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
@@ -115,6 +122,7 @@ const Tree = ({
             setContextForFileOpen={setContextForFileOpen}
             setContextForFolderOpen={setContextForFolderOpen}
             setPath={setPath}
+            depth={depth + 1}
           />
         ))}
     </div>
@@ -156,16 +164,20 @@ export const FolderStructureComponent = () => {
         />
       )}
       {folderStructure && (
-        <Tree
-          data={folderStructure}
-          ws={ws!}
-          addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
-          setX={setX}
-          setY={setY}
-          setContextForFileOpen={setContextForFileOpen}
-          setContextForFolderOpen={setContextForFolderOpen}
-          setPath={setPath}
-        />
+        folderStructure.children?.map((child) => (
+          <Tree
+            key={child.path}
+            data={child}
+            ws={ws!}
+            addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
+            setX={setX}
+            setY={setY}
+            setContextForFileOpen={setContextForFileOpen}
+            setContextForFolderOpen={setContextForFolderOpen}
+            setPath={setPath}
+            depth={0}
+          />
+        ))
       )}
     </>
   );

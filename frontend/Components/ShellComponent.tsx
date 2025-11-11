@@ -8,7 +8,11 @@ import "xterm/css/xterm.css";
 
 import shellSocketStore from "../Store/shellSocketStore";
 
-export const ShellComponent = () => {
+interface ShellComponentProps {
+  onShellReady?: () => void;
+}
+
+export const ShellComponent = ({ onShellReady }: ShellComponentProps) => {
   const setWs = shellSocketStore((state) => state.setWs);
 
   const terminal = useRef<HTMLDivElement | null>(null);
@@ -60,13 +64,42 @@ export const ShellComponent = () => {
     fitAddon.fit();
     window.addEventListener("resize", handleResize);
 
+    let resizeObserver: ResizeObserver | null = null;
+
+    if (terminal.current && "ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(() => {
+        fitAddon.fit();
+      });
+      resizeObserver.observe(terminal.current);
+    }
+
     ws.onopen = () => {
       const attachAddon = new AttachAddon(ws);
       term.loadAddon(attachAddon);
       setWs(ws);
+      onShellReady?.();
     };
 
+    term.attachCustomKeyEventHandler((event) => {
+      if (
+        event.type === "keydown" &&
+        event.ctrlKey &&
+        event.shiftKey &&
+        event.code === "KeyC"
+      ) {
+        const selection = term.getSelection();
+        if (selection) {
+          navigator.clipboard?.writeText(selection).catch(() => undefined);
+          return false;
+        }
+      }
+      return true;
+    });
+
     return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       window.removeEventListener("resize", handleResize);
       setWs(null);
       ws.close();

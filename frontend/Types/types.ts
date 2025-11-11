@@ -22,6 +22,7 @@ export interface ActiveTabStoreState {
     extension: string | undefined,
     value: string
   ) => void;
+  clearActiveTab: () => void;
 }
 
 interface AvailableTabs {
@@ -31,6 +32,7 @@ interface AvailableTabs {
 export interface AvailableTabsStoreState {
   availableTabs: AvailableTabs;
   addOrUpdateAvailableTabs: (path: string) => void;
+  removeTab: (path: string) => string | null;
 }
 
 export interface FolderStructure {
@@ -42,6 +44,12 @@ export interface FolderStructure {
 export interface FolderStructureStoreState {
   folderStructure: FolderStructure | null;
   setFolderStructure: (playgroundId: string) => void;
+}
+
+export interface PlaygroundMetadata {
+  templateId: string | null;
+  title: string | null;
+  hasPreview: boolean;
 }
 
 export interface PortStoreState {
@@ -99,6 +107,8 @@ export interface ContextForFoldersProps {
 export interface EditorButtonComponentProps {
   path: string;
   isActive: boolean;
+  onActivate: (path: string) => void;
+  onClose: (path: string, wasActive: boolean) => void;
 }
 
 export interface TreeProps {
@@ -110,6 +120,7 @@ export interface TreeProps {
   setContextForFileOpen: Dispatch<boolean>;
   setContextForFolderOpen: Dispatch<boolean>;
   setPath: Dispatch<string>;
+  depth: number;
 }
 
 export interface VisibleState {

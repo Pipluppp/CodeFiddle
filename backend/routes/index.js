@@ -3,6 +3,7 @@ const router = express.Router();
 
 const path = require("path");
 const fs = require("fs");
+const fsPromises = require("fs/promises");
 const directoryTree = require("directory-tree");
 
 const createPlaygroundFromTemplate = require("../utils/createPlaygroundFromTemplate");
@@ -48,6 +49,29 @@ router
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to create playground" });
+    }
+  })
+  .get("/playgrounds/:playgroundId/meta", async (req, res) => {
+    const playgroundId = req.params.playgroundId;
+    const metadataPath = path.resolve(
+      `${__dirname}/../playgrounds/${playgroundId}/template.json`
+    );
+
+    try {
+      const rawMetadata = await fsPromises.readFile(metadataPath, "utf-8");
+      const metadata = JSON.parse(rawMetadata);
+      const template = metadata?.template
+        ? getTemplateById(metadata.template)
+        : null;
+
+      res.json({
+        templateId: metadata?.template ?? null,
+        title: template?.title ?? null,
+        hasPreview: Boolean(template?.preview?.enabled),
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(404).json({ error: "Metadata for playground not found." });
     }
   })
   .get("/templates", (req, res) => {

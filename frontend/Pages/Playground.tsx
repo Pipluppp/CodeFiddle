@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 //@ts-ignore:disable-next-line
 import { Allotment } from "allotment";
@@ -17,9 +17,13 @@ import { EditorTabsComponent } from "../Components/EditorTabsComponent";
 import { FolderModal } from "../Components/FolderModal";
 import { FileModal } from "../Components/FileModal";
 import createFileOrFolderStore from "../Store/createFileOrFolderStore";
+import { SetupOverlay, SetupOverlayStep } from "../Components/SetupOverlay";
+import { PlaygroundMetadata } from "../Types/types";
+import { buildApiUrl } from "../src/utils/api";
 
 export const Playground = () => {
   const { playgroundId } = useParams();
+  const navigate = useNavigate();
   const setFolderStructure = folderStructureStore(
     (state) => state.setFolderStructure
   );
@@ -27,13 +31,19 @@ export const Playground = () => {
   const setActiveTab = activeTabStore((state) => state.setActiveTab);
   const setPort = portStore((state) => state.setPort);
   const setPortError = portStore((state) => state.setError);
+  const port = portStore((state) => state.port);
+  const portError = portStore((state) => state.error);
   const setPath = createFileOrFolderStore((state) => state.setPath);
   const setIsFile = createFileOrFolderStore((state) => state.setIsFile);
+
+  const [playgroundMeta, setPlaygroundMeta] = useState<PlaygroundMetadata | null>(null);
+  const [shellReady, setShellReady] = useState(false);
 
   // All side-effects (fetching, websockets) go in here.
   useEffect(() => {
     // Only proceed if we have a valid playgroundId from the URL.
     if (playgroundId) {
+      setShellReady(false);
       setPort(null);
       setPortError(null);
 
@@ -85,14 +95,132 @@ export const Playground = () => {
         setPortError(null);
       };
     }
-  }, [playgroundId]); // The dependency array ensures this code only runs when playgroundId changes.
+  }, [
+    playgroundId,
+    setActiveTab,
+    setFolderStructure,
+    setIsFile,
+    setPath,
+    setPort,
+    setPortError,
+    setWs,
+  ]); // The dependency array ensures this code only runs when playgroundId changes.
+
+  useEffect(() => {
+    if (!playgroundId) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadMetadata = async () => {
+      try {
+        const response = await fetch(
+          buildApiUrl(`/playgrounds/${playgroundId}/meta`)
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch metadata");
+        }
+        const metadata: PlaygroundMetadata = await response.json();
+        if (!cancelled) {
+          setPlaygroundMeta(metadata);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setPlaygroundMeta(null);
+        }
+      }
+    };
+
+    loadMetadata();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [playgroundId]);
+
+  const shouldWaitForPreview = playgroundMeta?.hasPreview ?? true;
+  const encounteredError = Boolean(portError);
+  const workspaceReady = shouldWaitForPreview
+    ? Boolean(port) || encounteredError
+    : shellReady;
+  const showOverlay = Boolean(playgroundId) && !workspaceReady;
+
+  const setupSteps: SetupOverlayStep[] = useMemo(() => {
+    const steps: SetupOverlayStep[] = [];
+
+    steps.push({
+      id: "provision",
+      label: "Provisioning container",
+      status: shellReady || workspaceReady ? "complete" : "active",
+    });
+
+    steps.push({
+      id: "install",
+      label: "Running npm install",
+      status: workspaceReady ? "complete" : shellReady ? "active" : "pending",
+    });
+
+    if (shouldWaitForPreview) {
+      steps.push({
+        id: "start",
+        label: "Starting dev server",
+        status:
+          workspaceReady || encounteredError
+            ? "complete"
+            : shellReady
+            ? "active"
+            : "pending",
+      });
+    } else {
+      steps.push({
+        id: "start",
+        label: "Starting workspace",
+        status: shellReady ? "complete" : "pending",
+      });
+    }
+
+    steps.push({
+      id: "ready",
+      label: encounteredError ? "Encountered an issue" : "Launching workspace",
+      status: workspaceReady ? "complete" : shellReady ? "active" : "pending",
+    });
+
+    return steps;
+  }, [
+    encounteredError,
+    shellReady,
+    shouldWaitForPreview,
+    workspaceReady,
+  ]);
+
+  const overlaySubtitle = shouldWaitForPreview
+    ? "Installing dependencies and starting the live preview server."
+    : "Installing dependencies and preparing your runtime environment.";
+
+  const overlayHint = encounteredError
+    ? "Check the console output for details about the failure."
+    : "This can take a minute on the first launch, especially for larger templates.";
 
   return (
     <>
       <FolderModal />
       <FileModal />
       <div className="playground-background">
-        <Allotment className="playground-stage" defaultSizes={[23, 52, 25]}>
+        <div className="playground-topbar">
+          <button
+            type="button"
+            className="playground-topbar__back"
+            onClick={() => navigate("/")}
+          >
+            ← Back to templates
+          </button>
+          <span className="playground-topbar__label">
+            {playgroundMeta?.title ?? "Preparing template"}
+          </span>
+        </div>
+        <div className="playground-stage-wrapper">
+          <Allotment className="playground-stage" defaultSizes={[23, 52, 25]}>
           <Allotment.Pane minSize={60}>
             <div className="stage-slot stage-slot--sidebar">
               <div className="island island--sidebar">
@@ -129,7 +257,7 @@ export const Playground = () => {
                         <span>Console</span>
                       </div>
                       <div className="island-body utility-body">
-                        <ShellComponent />
+                        <ShellComponent onShellReady={() => setShellReady(true)} />
                       </div>
                     </div>
                   </div>
@@ -144,7 +272,15 @@ export const Playground = () => {
               </div>
             </div>
           </Allotment.Pane>
-        </Allotment>
+          </Allotment>
+        </div>
+        <SetupOverlay
+          visible={showOverlay}
+          title="Preparing your playground"
+          subtitle={overlaySubtitle}
+          hint={overlayHint}
+          steps={setupSteps}
+        />
       </div>
     </>
   );

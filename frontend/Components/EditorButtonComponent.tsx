@@ -1,27 +1,23 @@
-import websocketStore from "../Store/websocketStore";
-import availableTabsStore from "../Store/availableTabsStore";
-
 import { EditorButtonComponentProps } from "../Types/types";
 
 export const EditorButtonComponent = ({
   path,
   isActive,
+  onActivate,
+  onClose,
 }: EditorButtonComponentProps) => {
-  const ws = websocketStore((state) => state.ws);
-  const addOrUpdateAvailableTabs = availableTabsStore(
-    (state) => state.addOrUpdateAvailableTabs
-  );
-
   const handleClick = () => {
-    const message = {
-      type: "readFile",
-      payload: {
-        data: null,
-        path: path,
-      },
-    };
-    ws?.send(JSON.stringify(message));
-    addOrUpdateAvailableTabs(path);
+    if (isActive) {
+      return;
+    }
+    onActivate(path);
+  };
+
+  const handleClose = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    onClose(path, isActive);
   };
 
   const classNames = ["editor-tab"];
@@ -31,14 +27,23 @@ export const EditorButtonComponent = ({
   }
 
   return (
-    <button
-      type="button"
-      className={classNames.join(" ")}
-      disabled={isActive}
-      onClick={handleClick}
-      title={path}
-    >
-      {path.replace(/\\/g, "/").split("/").pop()}
-    </button>
+    <div className={classNames.join(" ")} title={path} role="tab">
+      <button
+        type="button"
+        className="editor-tab__trigger"
+        disabled={isActive}
+        onClick={handleClick}
+      >
+        {path.replace(/\\/g, "/").split("/").pop()}
+      </button>
+      <button
+        type="button"
+        className="editor-tab__close"
+        aria-label={`Close ${path}`}
+        onClick={handleClose}
+      >
+        ×
+      </button>
+    </div>
   );
 };

@@ -7,19 +7,19 @@
     "dev": "nodemon app"
   },
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "cookie-parser": "~1.4.4",
+    "chokidar": "^4.0.3",
+    "cookie-parser": "~1.4.7",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "directory-tree": "^3.5.1",
-    "dockerode": "^3.3.5",
-    "express": "~4.16.1",
-    "morgan": "~1.9.1",
+    "debug": "~4.4.3",
+    "directory-tree": "^3.5.2",
+    "dockerode": "^4.0.9",
+    "express": "~5.1.0",
+    "morgan": "~1.10.1",
     "querystring": "^0.2.1",
     "uuid4": "^2.0.3",
-    "ws": "^8.13.0"
+    "ws": "^8.18.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^3.1.10"
   }
 }

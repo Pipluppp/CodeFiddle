@@ -3,7 +3,7 @@ RUN useradd -ms /bin/bash codefiddle
 RUN chown -R codefiddle:codefiddle /home/codefiddle/
 WORKDIR /home/codefiddle/
 RUN apt update && apt upgrade -y
-RUN apt install curl nano -y
+RUN apt install curl nano unzip -y
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt install -y nodejs
 RUN echo "PS1='\w '">>/home/codefiddle/.bashrc
 WORKDIR /home/codefiddle/code

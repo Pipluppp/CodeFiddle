@@ -21,18 +21,23 @@ import { PlaygroundTemplate } from "../Types/types";
 import "../assets/landing.css";
 
 import {
-  SiReact,
-  SiVuedotjs,
   SiAngular,
-  SiSvelte,
-  SiJavascript,
-  SiTypescript,
-  SiNodedotjs,
+  SiBun,
   SiExpress,
+  SiHtml5,
+  SiJavascript,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiReact,
+  SiSvelte,
+  SiTypescript,
+  SiVuedotjs,
 } from "react-icons/si";
 
 const TEMPLATE_ICONS: Record<string, ReactNode> = {
+  "html-css": <SiHtml5 className="template-card__logo" />,
   react: <SiReact className="template-card__logo" />,
+  nextjs: <SiNextdotjs className="template-card__logo" />,
   vue: <SiVuedotjs className="template-card__logo" />,
   angular: <SiAngular className="template-card__logo" />,
   svelte: <SiSvelte className="template-card__logo" />,
@@ -40,6 +45,7 @@ const TEMPLATE_ICONS: Record<string, ReactNode> = {
   typescript: <SiTypescript className="template-card__logo" />,
   node: <SiNodedotjs className="template-card__logo" />,
   express: <SiExpress className="template-card__logo" />,
+  bun: <SiBun className="template-card__logo" />,
 };
 
 const { Title, Paragraph, Text } = Typography;

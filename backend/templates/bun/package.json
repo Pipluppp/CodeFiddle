@@ -1,0 +1,12 @@
+{
+  "name": "bun-http-playground",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "bun --hot run http.ts",
+    "start": "bun run http.ts"
+  },
+  "devDependencies": {
+    "bun-types": "^1.1.8"
+  }
+}

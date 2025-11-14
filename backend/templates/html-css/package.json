@@ -1,0 +1,19 @@
+{
+  "name": "html-css",
+  "version": "1.0.0",
+  "description": "A template for HTML and CSS",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve -l 4173 -n",
+    "start": "npm run dev"
+  },
+  "keywords": [
+    "html",
+    "css"
+  ],
+  "author": "CodeFiddle",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

@@ -43,7 +43,58 @@ const withNodeCommands = (label) => ({
   ],
 });
 
+const withStaticSiteCommands = (label) => ({
+  autoBootstrap: true,
+  bootstrapDelayMs: 300,
+  commands: [
+    `echo "Bootstrapping ${label} template: installing dependencies and starting the static preview server..."`,
+    `cd ${WORKDIR}`,
+    "npm install",
+    "npm run dev",
+  ],
+});
+
+const withNextCommands = (label) => ({
+  autoBootstrap: true,
+  bootstrapDelayMs: 300,
+  commands: [
+    `echo "Bootstrapping ${label} template: installing dependencies and starting the Next.js dev server..."`,
+    `cd ${WORKDIR}`,
+    "export NEXT_TELEMETRY_DISABLED=1",
+    "npm install",
+    "npm run dev",
+  ],
+});
+
+const withBunCommands = (label) => ({
+  autoBootstrap: true,
+  bootstrapDelayMs: 300,
+  commands: [
+    `echo "Bootstrapping ${label} template: ensuring Bun is available and starting the server..."`,
+    `cd ${WORKDIR}`,
+    "if [ ! -x \"$HOME/.bun/bin/bun\" ]; then curl -fsSL https://bun.sh/install | bash; fi && export BUN_INSTALL=\"$HOME/.bun\" && export PATH=\"$BUN_INSTALL/bin:$PATH\" && bun install && bun run dev",
+  ],
+});
+
 const templates = [
+  {
+    id: "html-css",
+    title: "HTML + CSS",
+    description: "Barebones static site scaffold with hot reload via serve.",
+    category: "frontend",
+    tags: ["HTML", "CSS", "Static"],
+    directory: path.join(__dirname, "html-css"),
+    preview: {
+      enabled: true,
+      protocol: "http",
+      port: 4173,
+      healthCheckPath: "/",
+      timeoutMs: DEFAULT_TIMEOUT_MS,
+      pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
+    },
+    shell: withStaticSiteCommands("HTML + CSS"),
+    displayOrder: 1,
+  },
   {
     id: "react",
     title: "React",
@@ -60,7 +111,25 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withViteCommands("React"),
-    displayOrder: 1,
+    displayOrder: 2,
+  },
+  {
+    id: "nextjs",
+    title: "Next.js",
+    description: "App Router powered Next.js starter with TypeScript.",
+    category: "frontend",
+    tags: ["Next.js", "React", "TypeScript"],
+    directory: path.join(__dirname, "nextjs"),
+    preview: {
+      enabled: true,
+      protocol: "http",
+      port: 3000,
+      healthCheckPath: "/",
+      timeoutMs: 300000,
+      pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
+    },
+    shell: withNextCommands("Next.js"),
+    displayOrder: 3,
   },
   {
     id: "vue",
@@ -78,7 +147,7 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withViteCommands("Vue"),
-    displayOrder: 2,
+    displayOrder: 4,
   },
   {
     id: "angular",
@@ -96,7 +165,7 @@ const templates = [
       pollIntervalMs: 2000,
     },
     shell: withAngularCommands("Angular"),
-    displayOrder: 3,
+    displayOrder: 5,
   },
   {
     id: "svelte",
@@ -114,7 +183,7 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withViteCommands("Svelte"),
-    displayOrder: 4,
+    displayOrder: 6,
   },
   {
     id: "javascript",
@@ -132,7 +201,7 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withViteCommands("Vanilla JS"),
-    displayOrder: 5,
+    displayOrder: 7,
   },
   {
     id: "typescript",
@@ -150,7 +219,7 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withViteCommands("Vanilla TS"),
-    displayOrder: 6,
+    displayOrder: 8,
   },
   {
     id: "node",
@@ -163,7 +232,25 @@ const templates = [
       enabled: false,
     },
     shell: withNodeCommands("Node.js"),
-    displayOrder: 7,
+    displayOrder: 9,
+  },
+  {
+    id: "bun",
+    title: "Bun",
+    description: "Bun runtime starter with a zero-dependency HTTP server.",
+    category: "backend",
+    tags: ["Bun", "JavaScript", "TypeScript"],
+    directory: path.join(__dirname, "bun"),
+    preview: {
+      enabled: true,
+      protocol: "http",
+      port: 3000,
+      healthCheckPath: "/",
+      timeoutMs: DEFAULT_TIMEOUT_MS,
+      pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
+    },
+    shell: withBunCommands("Bun"),
+    displayOrder: 10,
   },
   {
     id: "express",
@@ -181,7 +268,7 @@ const templates = [
       pollIntervalMs: DEFAULT_POLL_INTERVAL_MS,
     },
     shell: withNodeCommands("Express"),
-    displayOrder: 8,
+    displayOrder: 11,
   },
 ];
 

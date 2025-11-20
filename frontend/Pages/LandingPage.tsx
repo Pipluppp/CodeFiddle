@@ -13,6 +13,7 @@ import {
   Tag,
   Spin,
   message,
+  Tooltip,
 } from "antd";
 
 import { buildApiUrl } from "../src/utils/api";
@@ -84,14 +85,14 @@ export const LandingPage = () => {
     return templates.find((template) => template.id === selectedTemplateId) || null;
   }, [selectedTemplateId, templates]);
 
-  const handleCreatePlayground = () => {
-    if (!selectedTemplateId) {
+  const handleCreatePlayground = (templateId: string) => {
+    if (!templateId) {
       return;
     }
 
     setIsCreating(true);
     axios
-      .post(buildApiUrl("/playgrounds"), { template: selectedTemplateId })
+      .post(buildApiUrl("/playgrounds"), { template: templateId })
       .then((resp) => {
         navigate(`/playground/${resp.data.playgroundId}`);
       })
@@ -128,41 +129,46 @@ export const LandingPage = () => {
             <SiJavascript className="template-card__logo" />
           );
           return (
-            <Card
+            <Tooltip
               key={template.id}
-              hoverable
-              className={`template-card${isSelected ? " template-card--selected" : ""}`}
-              onClick={() => setSelectedTemplateId(template.id)}
+              title={`Launch ${template.title} playground`}
+              placement="top"
             >
-              <Space direction="vertical" size="middle">
-                <div className="template-card__header">
-                  <div className="template-card__titleGroup">
-                    {icon}
-                    <Title level={3} className="template-card__title">
-                      {template.title}
-                    </Title>
+              <Card
+                hoverable
+                className={`template-card${isSelected ? " template-card--selected" : ""}`}
+                onClick={() => handleCreatePlayground(template.id)}
+              >
+                <Space direction="vertical" size="middle">
+                  <div className="template-card__header">
+                    <div className="template-card__titleGroup">
+                      {icon}
+                      <Title level={3} className="template-card__title">
+                        {template.title}
+                      </Title>
+                    </div>
+                    <Tag
+                      color={template.hasPreview ? "blue" : "purple"}
+                      className="template-card__modeTag"
+                    >
+                      {template.hasPreview ? "Preview" : "Console"}
+                    </Tag>
                   </div>
-                  <Tag
-                    color={template.hasPreview ? "blue" : "purple"}
-                    className="template-card__modeTag"
-                  >
-                    {template.hasPreview ? "Preview" : "Console"}
-                  </Tag>
-                </div>
-                <Paragraph className="template-card__description">
-                  {template.description}
-                </Paragraph>
-                {template.tags.length ? (
-                  <div className="template-card__tags">
-                    {template.tags.map((tag) => (
-                      <Tag key={`${template.id}-${tag}`} className="template-card__tag">
-                        {tag}
-                      </Tag>
-                    ))}
-                  </div>
-                ) : null}
-              </Space>
-            </Card>
+                  <Paragraph className="template-card__description">
+                    {template.description}
+                  </Paragraph>
+                  {template.tags.length ? (
+                    <div className="template-card__tags">
+                      {template.tags.map((tag) => (
+                        <Tag key={`${template.id}-${tag}`} className="template-card__tag">
+                          {tag}
+                        </Tag>
+                      ))}
+                    </div>
+                  ) : null}
+                </Space>
+              </Card>
+            </Tooltip>
           );
         })}
       </div>
@@ -181,23 +187,7 @@ export const LandingPage = () => {
           </Paragraph>
         </div>
         {renderTemplates()}
-        <div className="landing-actions">
-          <Button
-            type="primary"
-            size="large"
-            onClick={handleCreatePlayground}
-            disabled={!selectedTemplate}
-            loading={isCreating}
-          >
-            Launch playground
-          </Button>
-          {selectedTemplate ? (
-            <Text className="landing-selection">
-              Launching <strong>{selectedTemplate.title}</strong>{" "}
-              {selectedTemplate.hasPreview ? "with live preview" : "in console mode"}.
-            </Text>
-          ) : null}
-        </div>
+
       </Col>
     </Row>
   );

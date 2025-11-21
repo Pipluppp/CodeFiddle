@@ -264,6 +264,13 @@
 }
 
 
+/* Hide Codeium branding link in the editor from windsurf ai completion */
+.editor-surface a[href*="codeium.com"] {
+    display: none !important;
+    pointer-events: none;
+    visibility: hidden;
+}
+
 
 .editor-tabs-bar {
     display: flex;

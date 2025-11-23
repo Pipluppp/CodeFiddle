@@ -258,7 +258,7 @@ export const Playground = () => {
         /* 4. Terminal */
         terminal={
           <Island title="Terminal">
-            <div className="h-full w-full bg-[#1e1f22] p-2"> {/* Manual dark bg for xterm */}
+            <div className="h-full w-full bg-[#17191A] p-2"> {/* Manual dark bg for xterm */}
               <ShellComponent onShellReady={() => setShellReady(true)} />
             </div>
           </Island>

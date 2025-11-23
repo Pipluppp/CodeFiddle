@@ -107,5 +107,5 @@ export const ShellComponent = ({ onShellReady }: ShellComponentProps) => {
     };
   }, [playgroundId, setWs]);
 
-  return <div ref={terminal} className="shell-terminal" id="terminal-container" />;
+  return <div ref={terminal} className="shell-terminal h-full w-full" id="terminal-container" />;
 };

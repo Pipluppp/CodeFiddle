@@ -4,7 +4,7 @@ import { CodeiumEditor } from "@codeium/react-code-editor";
 
 import activeTabStore from "../Store/activeTabStore";
 import websocketStore from "../Store/websocketStore";
-import { registerPlaygroundLanguages } from "../src/utils/registerPlaygroundLanguages";
+import { registerPlaygroundLanguages } from "../utils/registerPlaygroundLanguages";
 
 const detectLanguage = (path: string | undefined): string | undefined => {
   if (!path) {
@@ -96,7 +96,7 @@ const islandTheme = {
     { token: "entity.name.type", foreground: "a9b7c6" },
   ] as { token: string; foreground: string }[],
   colors: {
-    "editor.background": "#2b2b2b",
+    "editor.background": "#17191A",
     "editor.foreground": "#cccccc",
     "editorCursor.foreground": "#3574f0",
     "editorLineNumber.foreground": "#5a5a5a",
@@ -109,7 +109,7 @@ const islandTheme = {
     "editor.lineHighlightBackground": "#323233",
     "editorIndentGuide.background": "#3a3a3a",
     "editorIndentGuide.activeBackground": "#4a4a4a",
-    "editorGutter.background": "#2b2b2b",
+    "editorGutter.background": "#17191A",
     "editorWidget.background": "#2f2f2f",
     "editorSuggestWidget.background": "#2f2f2f",
     "editorSuggestWidget.foreground": "#cccccc",

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { FolderStructureStoreState } from "../Types/types";
-import { buildApiUrl } from "../src/utils/api";
+import { buildApiUrl } from "../utils/api";
 
 const folderStructureStore = create<FolderStructureStoreState>()((set) => ({
   folderStructure: null,

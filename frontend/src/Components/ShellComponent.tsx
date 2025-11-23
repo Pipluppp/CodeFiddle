@@ -30,7 +30,7 @@ export const ShellComponent = ({ onShellReady }: ShellComponentProps) => {
       cursorBlink: true,
       convertEol: true,
       theme: {
-        background: "#2b2b2b",
+        background: "#17191A",
         foreground: "#cccccc",
         cursor: "#3574f0",
         cursorAccent: "#1e1e1e",

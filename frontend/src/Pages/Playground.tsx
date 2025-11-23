@@ -1,32 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ArrowLeft, RefreshCw, ExternalLink, Globe } from "lucide-react";
 
-//@ts-ignore:disable-next-line
-import { Allotment } from "allotment";
-import "allotment/dist/style.css";
-import "../assets/playground.css";
-import { BrowserComponent } from "../Components/BrowserComponent";
-import { EditorComponent } from "../Components/EditorComponent";
+import { IDELayout } from "../Components/layout/IDELayout";
+import { Island } from "../Components/ui/Island";
 import { FolderStructureComponent } from "../Components/FolderStructureComponent";
+import { EditorComponent } from "../Components/EditorComponent";
+import { EditorTabsComponent } from "../Components/EditorTabsComponent";
 import { ShellComponent } from "../Components/ShellComponent";
+import { BrowserComponent } from "../Components/BrowserComponent";
+import { FolderModal } from "../Components/FolderModal";
+import { FileModal } from "../Components/FileModal";
+import { SetupOverlay, SetupOverlayStep } from "../Components/SetupOverlay";
+
 import folderStructureStore from "../Store/folderStructureStore";
 import websocketStore from "../Store/websocketStore";
 import activeTabStore from "../Store/activeTabStore";
 import portStore from "../Store/portStore";
-import { EditorTabsComponent } from "../Components/EditorTabsComponent";
-import { FolderModal } from "../Components/FolderModal";
-import { FileModal } from "../Components/FileModal";
 import createFileOrFolderStore from "../Store/createFileOrFolderStore";
-import { SetupOverlay, SetupOverlayStep } from "../Components/SetupOverlay";
+import { buildApiUrl } from "../utils/api";
 import { PlaygroundMetadata } from "../Types/types";
-import { buildApiUrl } from "../src/utils/api";
 
 export const Playground = () => {
   const { playgroundId } = useParams();
   const navigate = useNavigate();
-  const setFolderStructure = folderStructureStore(
-    (state) => state.setFolderStructure
-  );
+  
+  // Stores
+  const setFolderStructure = folderStructureStore((state) => state.setFolderStructure);
   const setWs = websocketStore((state) => state.setWs);
   const setActiveTab = activeTabStore((state) => state.setActiveTab);
   const setPort = portStore((state) => state.setPort);
@@ -104,7 +104,7 @@ export const Playground = () => {
     setPort,
     setPortError,
     setWs,
-  ]); // The dependency array ensures this code only runs when playgroundId changes.
+  ]);
 
   useEffect(() => {
     if (!playgroundId) {
@@ -206,82 +206,79 @@ export const Playground = () => {
     <>
       <FolderModal />
       <FileModal />
-      <div className="playground-background">
-        <div className="playground-topbar">
-          <button
-            type="button"
-            className="playground-topbar__back"
-            onClick={() => navigate("/")}
-          >
-            ← Back to templates
-          </button>
-          <span className="playground-topbar__label">
-            {playgroundMeta?.title ?? "Preparing template"}
-          </span>
-        </div>
-        <div className="playground-stage-wrapper">
-          <Allotment className="playground-stage" defaultSizes={[23, 52, 25]}>
-          <Allotment.Pane minSize={60}>
-            <div className="stage-slot stage-slot--sidebar">
-              <div className="island island--sidebar">
-                <div className="island-header">
-                  <span>Project Files</span>
-                </div>
-                <div className="island-body sidebar-scroll">
-                  <FolderStructureComponent />
-                </div>
-              </div>
+      
+      <IDELayout
+        /* 1. Header */
+        topBar={
+          <div className="flex items-center justify-between w-full">
+            {/* Left: Back Button */}
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => navigate('/')}
+                className="text-jb-text-muted hover:text-jb-text transition-colors flex items-center gap-2"
+              >
+                <ArrowLeft size={16} />
+                <span className="text-xs font-medium">Back</span>
+              </button>
             </div>
-          </Allotment.Pane>
-          <Allotment.Pane minSize={260}>
-            <div className="stage-slot stage-slot--editor">
-              <Allotment vertical defaultSizes={[70, 30]}>
-                <Allotment.Pane minSize={220}>
-                  <div className="stage-subslot stage-subslot--editor">
-                    <div className="island editor-island">
-                      <EditorTabsComponent />
-                      <div className="editor-main">
-                        <div className="editor-body">
-                          <div className="editor-surface">
-                            <EditorComponent />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Allotment.Pane>
-                <Allotment.Pane minSize={140}>
-                  <div className="stage-subslot stage-subslot--utility">
-                    <div className="island utility-island">
-                      <div className="island-header island-header--compact">
-                        <span>Console</span>
-                      </div>
-                      <div className="island-body utility-body">
-                        <ShellComponent onShellReady={() => setShellReady(true)} />
-                      </div>
-                    </div>
-                  </div>
-                </Allotment.Pane>
-              </Allotment>
+
+            {/* Center: Breadcrumbs Pill */}
+            <div className="bg-[#25262A] px-4 py-1.5 rounded-full border border-jb-border flex items-center gap-2 shadow-sm">
+               <span className="text-xs text-jb-text-muted">intellij-community</span>
+               <span className="text-xs text-jb-text-muted">/</span>
+               <span className="text-xs font-medium text-jb-text">{playgroundMeta?.title || "loading..."}</span>
             </div>
-          </Allotment.Pane>
-          <Allotment.Pane minSize={200}>
-            <div className="stage-slot stage-slot--preview">
-              <div className="island preview-island">
-                <BrowserComponent />
-              </div>
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-3">
+               <button className="p-1.5 text-jb-text-muted hover:text-jb-text hover:bg-jb-panel-hover rounded-md transition-colors">
+                  <Globe size={16} />
+               </button>
             </div>
-          </Allotment.Pane>
-          </Allotment>
-        </div>
-        <SetupOverlay
-          visible={showOverlay}
-          title="Preparing your playground"
-          subtitle={overlaySubtitle}
-          hint={overlayHint}
-          steps={setupSteps}
-        />
-      </div>
+          </div>
+        }
+
+        /* 2. Sidebar */
+        sidebar={
+          <Island title="Explorer">
+            <FolderStructureComponent />
+          </Island>
+        }
+
+        /* 3. Editor */
+        editor={
+          <div className="flex flex-col h-full w-full bg-jb-panel overflow-hidden rounded-[var(--radius-panel)] border border-jb-border shadow-sm">
+            <EditorTabsComponent />
+            <div className="flex-1 relative bg-jb-dark">
+              <EditorComponent />
+            </div>
+          </div>
+        }
+
+        /* 4. Terminal */
+        terminal={
+          <Island title="Terminal">
+            <div className="h-full w-full bg-[#1e1f22] p-2"> {/* Manual dark bg for xterm */}
+              <ShellComponent onShellReady={() => setShellReady(true)} />
+            </div>
+          </Island>
+        }
+
+        /* 5. Preview */
+        preview={
+          <div className="h-full w-full bg-white rounded-[var(--radius-panel)] overflow-hidden border border-jb-border shadow-sm">
+             <BrowserComponent />
+          </div>
+        }
+      />
+      
+      <SetupOverlay
+        visible={showOverlay}
+        title="Preparing your playground"
+        subtitle={overlaySubtitle}
+        hint={overlayHint}
+        steps={setupSteps}
+      />
     </>
   );
 };

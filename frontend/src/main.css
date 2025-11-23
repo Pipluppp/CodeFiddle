@@ -1,16 +1,84 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
 
-@font-face {
-  font-family: "Droid Sans Mono";
-  src: local("Droid Sans Mono"),
-    url("../assets/DroidSansMono.ttf") format("truetype");
-  font-weight: regular;
+@theme {
+  /* JetBrains-inspired 'Islands' Palette */
+  --color-jb-dark: #1e1f22;
+  /* Fallback */
+  --color-jb-panel: #17191A;
+  /* Panels (Explorer, Terminal) */
+  --color-jb-panel-hover: #212324;
+  --color-jb-border: transparent;
+  /* No borders as requested */
+
+  /* Text Colors */
+  --color-jb-text: #bcbec4;
+  /* Primary Text */
+  --color-jb-text-muted: #7a7e85;
+  /* Comments/Muted */
+
+  /* Accents */
+  --color-jb-accent: #3574f0;
+  /* Primary Blue (Selection) */
+  --color-jb-accent-soft: rgba(53, 116, 240, 0.15);
+  --color-jb-accent-folder: #589df6;
+  --color-jb-accent-java: #e0ad38;
+
+  /* Syntax Highlighting */
+  --color-jb-keyword: #cf8e6d;
+  --color-jb-annotation: #b3ae60;
+  --color-jb-field: #c77dbb;
+  --color-jb-string: #6aab73;
+
+  /* Editor Specific */
+  --color-jb-editor-bg: #17191A;
+  --color-jb-gutter-bg: #17191A;
+
+  /* UI Shapes */
+  --radius-panel: 12px;
+
+  /* Fonts */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
-* {
-  padding: 0;
+:root {
+  background-color: var(--color-jb-dark);
+  /* Mild bluish gradient for the backdrop */
+  /* Mild bluish gradient for the backdrop: Top-Left + Bottom-Right */
+  background-image:
+    radial-gradient(circle at top left, #2e3c50 0%, transparent 50%),
+    radial-gradient(circle at right, #2e3c50 0%, transparent 95%),
+    linear-gradient(#1e1f22, #1e1f22);
+  /* Base color */
+  color: var(--color-jb-text);
+  font-family: var(--font-sans);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
   margin: 0;
-  /* font-family: "Droid Sans Mono", monospace; */
+  overflow: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #393b40;
+  border-radius: 5px;
+  border: 2px solid var(--color-jb-panel);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4e5157;
 }

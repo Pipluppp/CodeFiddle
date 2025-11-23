@@ -109,3 +109,23 @@ body,
 .split-view-separator-border .sash:before {
   background: transparent !important;
 }
+
+/* Hide Codeium branding link in the editor from windsurf ai completion */
+a[href*="codeium.com"],
+a[href*="codeium"] {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+}
+
+/* Target Monaco editor specific areas */
+.monaco-editor a[href*="codeium"],
+.editor-container a[href*="codeium"],
+.overflow-guard a[href*="codeium"],
+.editor-surface a[href*="codeium"] {
+  display: none !important;
+}

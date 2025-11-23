@@ -20,7 +20,7 @@ export const IDELayout = ({ sidebar, editor, terminal, preview, topBar }: IDELay
 
       {/* Main Workspace */}
       <div className="flex-1 min-h-0 p-2"> {/* Added outer padding */}
-        <Allotment>
+        <Allotment separator={false}>
           {/* Sidebar */}
           <Allotment.Pane minSize={200} preferredSize={250} maxSize={400}>
             <div className="h-full pr-2"> {/* Right gap for sidebar */}
@@ -31,7 +31,7 @@ export const IDELayout = ({ sidebar, editor, terminal, preview, topBar }: IDELay
           {/* Editor + Terminal Group */}
           <Allotment.Pane minSize={400}>
             <div className="h-full flex flex-col">
-              <Allotment vertical>
+              <Allotment vertical separator={false}>
                 <Allotment.Pane minSize={200}>
                   <div className="h-full pb-2"> {/* Bottom gap for editor */}
                     {editor}

@@ -52,6 +52,10 @@
   /* Base color */
   color: var(--color-jb-text);
   font-family: var(--font-sans);
+
+  /* Allotment CSS variables - hide separators and borders */
+  --focus-border: transparent;
+  --separator-border: transparent;
 }
 
 html,
@@ -81,4 +85,27 @@ body,
 
 ::-webkit-scrollbar-thumb:hover {
   background: #4e5157;
+}
+
+/* Allotment resizer styling - hide visual elements but keep cursor and functionality */
+.sash {
+  background: transparent !important;
+}
+
+.sash:before,
+.sash:after {
+  display: none !important;
+}
+
+.sash-hover {
+  background: transparent !important;
+}
+
+.sash-active {
+  background: transparent !important;
+}
+
+/* Hide separator border */
+.split-view-separator-border .sash:before {
+  background: transparent !important;
 }

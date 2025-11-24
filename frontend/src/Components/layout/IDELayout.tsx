@@ -3,21 +3,15 @@ import "allotment/dist/style.css";
 import { ReactNode } from "react";
 
 interface IDELayoutProps {
-  topBar: ReactNode;
   sidebar: ReactNode;
   editor: ReactNode;
   terminal: ReactNode;
   preview: ReactNode;
 }
 
-export const IDELayout = ({ sidebar, editor, terminal, preview, topBar }: IDELayoutProps) => {
+export const IDELayout = ({ sidebar, editor, terminal, preview }: IDELayoutProps) => {
   return (
     <div className="flex flex-col h-screen w-screen text-jb-text overflow-hidden">
-      {/* Top Bar */}
-      <div className="h-12 shrink-0 flex items-center px-2">
-        {topBar}
-      </div>
-
       {/* Main Workspace */}
       <div className="flex-1 min-h-0 p-2"> {/* Added outer padding */}
         <Allotment separator={false}>

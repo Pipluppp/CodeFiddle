@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import { ReloadOutlined } from "@ant-design/icons";
+import { Globe } from "lucide-react";
 
 import portStore from "../Store/portStore";
 import shellSocketStore from "../Store/shellSocketStore";
@@ -113,6 +114,25 @@ export const BrowserComponent: React.FC = () => {
             aria-label="Preview address"
             spellCheck={false}
           />
+        </div>
+        <div className="flex items-center gap-1">
+           <button
+             type="button"
+             className={`p-1.5 rounded transition-colors ${
+               port 
+                 ? "text-gray-500 hover:text-gray-700 hover:bg-gray-200 cursor-pointer" 
+                 : "text-gray-300 cursor-not-allowed"
+             }`}
+             onClick={() => {
+               if (port) {
+                 window.open(`http://${containerHost}:${port}`, '_blank');
+               }
+             }}
+             disabled={!port}
+             title="Open in New Tab"
+           >
+             <Globe size={14} />
+           </button>
         </div>
       </div>
       

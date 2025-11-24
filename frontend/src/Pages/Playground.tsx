@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, RefreshCw, ExternalLink, Globe } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { IDELayout } from "../Components/layout/IDELayout";
 import { Island } from "../Components/ui/Island";
@@ -209,40 +209,36 @@ export const Playground = () => {
       
       <IDELayout
         /* 1. Header */
-        topBar={
-          <div className="flex items-center justify-between w-full">
-            {/* Left: Back Button */}
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => navigate('/')}
-                className="text-jb-text-muted hover:text-jb-text transition-colors flex items-center gap-2"
-              >
-                <ArrowLeft size={16} />
-                <span className="text-xs font-medium">Back</span>
-              </button>
-            </div>
-
-            {/* Center: Breadcrumbs Pill */}
-            <div className="bg-[#25262A] px-4 py-1.5 rounded-full border border-jb-border flex items-center gap-2 shadow-sm">
-               <span className="text-xs text-jb-text-muted">intellij-community</span>
-               <span className="text-xs text-jb-text-muted">/</span>
-               <span className="text-xs font-medium text-jb-text">{playgroundMeta?.title || "loading..."}</span>
-            </div>
-
-            {/* Right: Actions */}
-            <div className="flex items-center gap-3">
-               <button className="p-1.5 text-jb-text-muted hover:text-jb-text hover:bg-jb-panel-hover rounded-md transition-colors">
-                  <Globe size={16} />
-               </button>
-            </div>
-          </div>
-        }
-
         /* 2. Sidebar */
         sidebar={
-          <Island title="Explorer">
-            <FolderStructureComponent />
-          </Island>
+          <div className="flex flex-col h-full w-full bg-jb-panel rounded-[var(--radius-panel)] overflow-hidden border border-jb-border shadow-sm">
+            {/* Sidebar Header */}
+            <div className="flex items-center gap-3 px-4 h-12 border-b border-jb-border shrink-0 bg-jb-panel">
+              <button 
+                onClick={() => navigate('/')}
+                className="group flex items-center justify-center p-1 -ml-2 rounded-md hover:bg-jb-panel-hover text-jb-text-muted hover:text-jb-text transition-colors"
+                title="Go Back"
+              >
+                <ArrowLeft size={16} />
+              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-jb-text tracking-wide">Codebox</span>
+                {playgroundMeta?.templateId && (
+                  <>
+                    <span className="text-jb-text-muted">/</span>
+                    <span className="text-sm font-medium text-jb-text-muted capitalize">
+                      {playgroundMeta.templateId}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* File Tree */}
+            <div className="flex-1 min-h-0 relative flex flex-col">
+              <FolderStructureComponent />
+            </div>
+          </div>
         }
 
         /* 3. Editor */

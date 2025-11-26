@@ -10,6 +10,10 @@ export default defineConfig({
     https: {
       key: '/certs/privkey.pem',
       cert: '/certs/fullchain.pem'
+    },
+    hmr: {
+      host: "codebox.tutorialsdojo.com",
+      protocol: "wss"
     }
   },
   preview: {

@@ -53,7 +53,7 @@ const templates = [
     directory: path.join(__dirname, "react"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 5173,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -71,7 +71,7 @@ const templates = [
     directory: path.join(__dirname, "vue"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 5173,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -89,7 +89,7 @@ const templates = [
     directory: path.join(__dirname, "angular"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 4200,
       healthCheckPath: "/",
       timeoutMs: 300000,
@@ -107,7 +107,7 @@ const templates = [
     directory: path.join(__dirname, "svelte"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 5173,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -125,7 +125,7 @@ const templates = [
     directory: path.join(__dirname, "javascript"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 5173,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -143,7 +143,7 @@ const templates = [
     directory: path.join(__dirname, "typescript"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 5173,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,
@@ -174,7 +174,7 @@ const templates = [
     directory: path.join(__dirname, "express"),
     preview: {
       enabled: true,
-      protocol: "http",
+      protocol: "https",
       port: 3000,
       healthCheckPath: "/",
       timeoutMs: DEFAULT_TIMEOUT_MS,

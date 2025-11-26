@@ -1,5 +1,6 @@
 const fs = require("fs");
 const http = require("http");
+const https = require("https");
 
 const Docker = require("dockerode");
 
@@ -20,16 +21,20 @@ const sleep = (ms) =>
     setTimeout(resolve, ms);
   });
 
-const isServerReachable = (host, port, path = "/") =>
+const isServerReachable = (host, port, path = "/", protocol = "http") =>
   new Promise((resolve) => {
-    const request = http.get(
-      {
-        host,
-        port,
-        path,
-        timeout: 2000,
-      },
-      (response) => {
+    const lib = protocol === "https" ? https : http;
+
+    const options = {
+      host,
+      port,
+      path,
+      timeout: 2000,
+      // If using HTTPS, don't fail because 'localhost' doesn't match 'codebox.tutorialsdojo.com'
+      rejectUnauthorized: false,
+    };
+
+    const request = lib.get(options, (response) => {
         response.resume();
         resolve(response.statusCode < 500);
       }
@@ -46,20 +51,21 @@ const waitForDevServer = async (
   host,
   port,
   path,
+  protocol = "http",
   timeoutMs = DEFAULT_DEV_SERVER_TIMEOUT_MS,
   pollIntervalMs = DEFAULT_DEV_SERVER_POLL_INTERVAL_MS
 ) => {
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
-    const reachable = await isServerReachable(host, port, path);
+    const reachable = await isServerReachable(host, port, path, protocol);
     if (reachable) {
       return;
     }
     await sleep(pollIntervalMs);
   }
 
-  throw new Error(`Timed out waiting for dev server on ${host}:${port}`);
+  throw new Error(`Timed out waiting for dev server on ${protocol}://${host}:${port}`);
 };
 
 const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
@@ -214,6 +220,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
 
       const privatePort = previewConfig.port;
       const healthCheckPath = previewConfig.healthCheckPath || "/";
+      const protocol = previewConfig.protocol || "http";
       const timeoutMs =
         previewConfig.timeoutMs || DEFAULT_DEV_SERVER_TIMEOUT_MS;
       const pollIntervalMs =
@@ -267,6 +274,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
             CONTAINER_HOST,
             publicPort,
             healthCheckPath,
+            protocol,
             timeoutMs,
             pollIntervalMs
           );

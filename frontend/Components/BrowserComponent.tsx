@@ -45,7 +45,7 @@ export const BrowserComponent: React.FC = () => {
     ws.send(JSON.stringify(message));
   }, [playgroundId, ws, wsForShell, port, error]);
 
-  const previewUrl = port ? `http://${containerHost}:${port}` : "";
+  const previewUrl = port ? `https://${containerHost}:${port}` : "";
   const addressDisplay = port
     ? previewUrl
     : error

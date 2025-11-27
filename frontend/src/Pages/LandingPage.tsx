@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Code2, Terminal, Cpu, Globe, Server, FileJson, FileCode, Layers } from "lucide-react";
+import { Code2, Terminal, Cpu, Server, FileCode, Layers } from "lucide-react";
 import { cn } from "../lib/utils";
 import { buildApiUrl } from "../utils/api";
-import { PlaygroundTemplate } from "../Types/types";
+import { PlaygroundTemplate } from "../types/types";
 
 const TEMPLATE_ICONS: Record<string, React.ReactNode> = {
   react: <Code2 className="w-8 h-8 text-blue-400" />,
@@ -86,7 +86,7 @@ export const LandingPage = () => {
                   <button
                     key={template.id}
                     onClick={() => handleCreatePlayground(template.id)}
-                    className="group flex flex-col text-left bg-jb-panel hover:bg-jb-panel-hover border border-jb-border rounded-lg p-4 transition-all hover:border-jb-accent/50 hover:shadow-lg hover:-translate-y-1 h-fit"
+                    className="group flex flex-col text-left bg-jb-panel hover:bg-jb-panel-hover border border-jb-border rounded-lg p-4 transition-all hover:border-jb-accent/50 hover:shadow-lg h-fit"
                   >
                     <div className="flex items-start justify-between w-full mb-3">
                       <div className="p-1.5 bg-jb-dark rounded-md border border-jb-border group-hover:border-jb-accent/30 transition-colors">

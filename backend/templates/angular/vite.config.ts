@@ -2,6 +2,8 @@
 import { defineConfig } from "vite";
 import angular from "@analogjs/vite-plugin-angular";
 
+const hmrHost = process.env.VITE_HMR_HOST || "localhost";
+
 export default defineConfig({
   plugins: [angular()],
   server: {
@@ -12,7 +14,7 @@ export default defineConfig({
       cert: "/certs/fullchain.pem",
     },
     hmr: {
-      host: "codebox.tutorialsdojo.com",
+      host: hmrHost,
       protocol: "wss",
     },
   },

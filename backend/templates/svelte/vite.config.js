@@ -1,6 +1,8 @@
 import { defineConfig } from "vite"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 
+const hmrHost = process.env.VITE_HMR_HOST || "localhost";
+
 export default defineConfig({
   plugins: [
     svelte({
@@ -17,7 +19,7 @@ export default defineConfig({
       cert: "/certs/fullchain.pem",
     },
     hmr: {
-      host: "codebox.tutorialsdojo.com",
+      host: hmrHost,
       protocol: "wss",
     },
   },

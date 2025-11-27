@@ -26,6 +26,9 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
     };
   }
 
+  // 1. Determine the Host. Default to localhost if not set.
+  const hmrHost = process.env.VITE_HMR_HOST || "localhost";
+
   const containerConfig = {
     Image: "codefiddle",
     name: playgroundId,
@@ -38,8 +41,13 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
       "chown -R codefiddle:codefiddle /home/codefiddle/code && /bin/bash",
     ],
     Tty: true,
+    Env: [
+      `VITE_HMR_HOST=${hmrHost}`,
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    ],
     Volumes: {
       "/home/codefiddle/code": {},
+      "/certs": {},
     },
     HostConfig: hostConfig,
   };

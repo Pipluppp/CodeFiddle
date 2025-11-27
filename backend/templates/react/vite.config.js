@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const hmrHost = process.env.VITE_HMR_HOST || "localhost";
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -11,7 +13,7 @@ export default defineConfig({
       cert: "/certs/fullchain.pem",
     },
     hmr: {
-      host: "codebox.tutorialsdojo.com",
+      host: hmrHost,
       protocol: "wss",
     },
   },

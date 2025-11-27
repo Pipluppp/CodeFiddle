@@ -20,14 +20,16 @@ const sleep = (ms) =>
     setTimeout(resolve, ms);
   });
 
-const isServerReachable = (host, port, path = "/") =>
+const isServerReachable = (host, port, path = "/", protocol = "http") =>
   new Promise((resolve) => {
-    const request = http.get(
+    const lib = protocol === "https" ? require("https") : require("http");
+    const request = lib.get(
       {
         host,
         port,
         path,
         timeout: 2000,
+        rejectUnauthorized: false,
       },
       (response) => {
         response.resume();
@@ -46,13 +48,14 @@ const waitForDevServer = async (
   host,
   port,
   path,
+  protocol = "http",
   timeoutMs = DEFAULT_DEV_SERVER_TIMEOUT_MS,
   pollIntervalMs = DEFAULT_DEV_SERVER_POLL_INTERVAL_MS
 ) => {
   const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
-    const reachable = await isServerReachable(host, port, path);
+    const reachable = await isServerReachable(host, port, path, protocol);
     if (reachable) {
       return;
     }
@@ -267,6 +270,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
             CONTAINER_HOST,
             publicPort,
             healthCheckPath,
+            "https",
             timeoutMs,
             pollIntervalMs
           );

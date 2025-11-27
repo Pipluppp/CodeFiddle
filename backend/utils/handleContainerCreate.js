@@ -16,6 +16,7 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
       `${path.resolve(
         __dirname + "/../playgrounds/" + playgroundId + "/code"
       )}:/home/codefiddle/code`,
+      `${path.resolve(__dirname + "/../certs")}:/certs:ro`,
     ],
   };
 

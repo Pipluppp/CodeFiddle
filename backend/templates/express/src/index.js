@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
+const https = require("https");
+const fs = require("fs");
 
 const PORT = process.env.PORT || 3000;
 
@@ -97,6 +99,11 @@ app.get("/api/time", (req, res) => {
   res.json({ now: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Express server listening on http://localhost:${PORT}`);
+const options = {
+  key: fs.readFileSync("/certs/privkey.pem"),
+  cert: fs.readFileSync("/certs/fullchain.pem"),
+};
+
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`✅ Secure Express server listening on https://localhost:${PORT}`);
 });

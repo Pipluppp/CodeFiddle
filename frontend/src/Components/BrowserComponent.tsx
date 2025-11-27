@@ -46,7 +46,7 @@ export const BrowserComponent: React.FC = () => {
     ws.send(JSON.stringify(message));
   }, [playgroundId, ws, wsForShell, port, error]);
 
-  const previewUrl = port ? `http://${containerHost}:${port}` : "";
+  const previewUrl = port ? `https://${containerHost}:${port}` : "";
   const addressDisplay = port
     ? previewUrl
     : error
@@ -125,7 +125,7 @@ export const BrowserComponent: React.FC = () => {
              }`}
              onClick={() => {
                if (port) {
-                 window.open(`http://${containerHost}:${port}`, '_blank');
+                 window.open(`https://${containerHost}:${port}`, '_blank');
                }
              }}
              disabled={!port}

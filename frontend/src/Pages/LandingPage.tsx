@@ -63,7 +63,7 @@ export const LandingPage = () => {
             <div className="flex items-baseline tracking-tight" style={{ fontFamily: '"Google Sans Flex", sans-serif' }}>
               <span className="text-7xl font-bold text-white">Codeb</span>
               <div className="relative mx-1">
-                <div className="w-[38px] h-[38px] border-[7px] border-white rounded-[13px]"></div>
+                <div className="w-[38px] h-[38px] border-[9px] border-white rounded-[13px]"></div>
               </div>
               <span className="text-7xl font-bold text-white">x</span>
             </div>

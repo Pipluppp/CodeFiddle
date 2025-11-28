@@ -60,9 +60,13 @@ export const LandingPage = () => {
         {/* Header */}
         <div className="text-center space-y-2 flex-shrink-0 mb-4">
           <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="text-7xl font-bold text-white tracking-tight" style={{ fontFamily: '"Google Sans Flex", sans-serif' }}>
-              Codebox
-            </span>
+            <div className="flex items-baseline tracking-tight" style={{ fontFamily: '"Google Sans Flex", sans-serif' }}>
+              <span className="text-7xl font-bold text-white">Codeb</span>
+              <div className="relative mx-1">
+                <div className="w-[38px] h-[38px] border-[7px] border-white rounded-[13px]"></div>
+              </div>
+              <span className="text-7xl font-bold text-white">x</span>
+            </div>
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight">
             Choose a starting template

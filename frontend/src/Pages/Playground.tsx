@@ -9,8 +9,6 @@ import { EditorComponent } from "../Components/EditorComponent";
 import { EditorTabsComponent } from "../Components/EditorTabsComponent";
 import { ShellComponent } from "../Components/ShellComponent";
 import { BrowserComponent } from "../Components/BrowserComponent";
-import { FolderModal } from "../Components/FolderModal";
-import { FileModal } from "../Components/FileModal";
 import { SetupOverlay, SetupOverlayStep } from "../Components/SetupOverlay";
 
 import folderStructureStore from "../Store/folderStructureStore";
@@ -19,7 +17,7 @@ import activeTabStore from "../Store/activeTabStore";
 import portStore from "../Store/portStore";
 import createFileOrFolderStore from "../Store/createFileOrFolderStore";
 import { buildApiUrl } from "../utils/api";
-import { PlaygroundMetadata } from "../Types/types";
+import { PlaygroundMetadata } from "../types/types";
 
 export const Playground = () => {
   const { playgroundId } = useParams();
@@ -204,9 +202,6 @@ export const Playground = () => {
 
   return (
     <>
-      <FolderModal />
-      <FileModal />
-      
       <IDELayout
         /* 1. Header */
         /* 2. Sidebar */

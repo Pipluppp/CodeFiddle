@@ -55,22 +55,41 @@ app.get("/", (req, res) => {
             border-radius: 0.5rem;
             font-family: "JetBrains Mono", "Fira Code", monospace;
           }
-          ul {
-            list-style: none;
-            padding: 0;
-            margin: 2rem 0 0;
+          .actions {
+            margin-top: 2rem;
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
           }
-          a {
-            color: #2563eb;
-            text-decoration: none;
+          .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
             font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
           }
-          a:hover {
-            text-decoration: underline;
+          .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+          }
+          .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+          }
+          .btn-secondary {
+            background: rgba(15, 23, 42, 0.05);
+            color: #334155;
+          }
+          .btn-secondary:hover {
+            background: rgba(15, 23, 42, 0.1);
+            color: #0f172a;
+          }
+          .font-mono {
+            font-family: "JetBrains Mono", "Fira Code", monospace;
           }
         </style>
       </head>
@@ -85,10 +104,10 @@ app.get("/", (req, res) => {
             The terminal panel shows the server logs. Try hitting
             <code>/api/time</code> to see a JSON response.
           </p>
-          <ul>
-            <li><a href="/api/time" target="_blank">Current Time API</a></li>
-            <li><a href="https://expressjs.com/" target="_blank">Express Docs</a></li>
-          </ul>
+          <div class="actions">
+            <a href="/api/time" target="_blank" class="btn btn-primary font-mono">/api/time</a>
+            <a href="https://expressjs.com/" target="_blank" class="btn btn-secondary">Express Docs</a>
+          </div>
         </main>
       </body>
     </html>

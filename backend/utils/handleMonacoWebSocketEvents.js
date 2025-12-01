@@ -270,7 +270,7 @@ const handleMonacoWebSocketEvents = (ws, type, data, pathToFileOrFolder) => {
             CONTAINER_HOST,
             publicPort,
             healthCheckPath,
-            "https",
+            previewConfig.protocol || "http",
             timeoutMs,
             pollIntervalMs
           );

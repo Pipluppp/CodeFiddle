@@ -56,7 +56,7 @@ export const BrowserComponent: React.FC = () => {
   const renderContent = () => {
     if (error) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-red-400 p-4 text-center">
+        <div key="error" className="flex flex-col items-center justify-center h-full text-red-400 p-4 text-center">
           <div className="max-w-md">
             <h3 className="font-bold mb-2">Preview failed to start</h3>
             <p className="text-sm mb-2">{error}</p>
@@ -68,7 +68,7 @@ export const BrowserComponent: React.FC = () => {
 
     if (!port) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-jb-text-muted p-4 text-center">
+        <div key="loading" className="flex flex-col items-center justify-center h-full text-jb-text-muted p-4 text-center">
           <div className="max-w-md">
             <h3 className="font-bold mb-2 text-jb-text">Starting your preview...</h3>
             <p className="text-sm">
@@ -82,6 +82,7 @@ export const BrowserComponent: React.FC = () => {
 
     return (
       <iframe
+        key="iframe"
         className="w-full h-full bg-white"
         frameBorder={0}
         ref={browser}

@@ -125,7 +125,102 @@ a[href*="codeium"] {
 /* Target Monaco editor specific areas */
 .monaco-editor a[href*="codeium"],
 .editor-container a[href*="codeium"],
-.overflow-guard a[href*="codeium"],
-.editor-surface a[href*="codeium"] {
-  display: none !important;
+.markdown-preview h5,
+.markdown-preview h6 {
+  color: var(--color-jb-text);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.markdown-preview h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--color-jb-panel);
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--color-jb-panel);
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview h3 {
+  font-size: 1.25em;
+}
+
+.markdown-preview p {
+  margin-bottom: 1em;
+}
+
+.markdown-preview a {
+  color: var(--color-jb-accent);
+  text-decoration: none;
+}
+
+.markdown-preview a:hover {
+  text-decoration: underline;
+}
+
+.markdown-preview code {
+  background-color: var(--color-jb-panel);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  background-color: var(--color-jb-panel);
+  padding: 1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+.markdown-preview pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid var(--color-jb-panel-hover);
+  margin: 0 0 1em 0;
+  padding-left: 1em;
+  color: var(--color-jb-text-muted);
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 2em;
+  margin-bottom: 1em;
+}
+
+.markdown-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid var(--color-jb-panel-hover);
+  padding: 0.5em;
+  text-align: left;
+}
+
+.markdown-preview th {
+  background-color: var(--color-jb-panel);
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.markdown-preview hr {
+  border: 0;
+  border-top: 1px solid var(--color-jb-panel);
+  margin: 2em 0;
 }

@@ -4,8 +4,6 @@ const getTemplateForPlayground = require("./getTemplateForPlayground");
 const FALLBACK_BOOTSTRAP_DELAY_MS = 300;
 const FALLBACK_BOOTSTRAP_COMMANDS = [
   'echo "Bootstrapping playground: installing dependencies and starting the dev server..."',
-  "export CHOKIDAR_USEPOLLING=1",
-  "export CHOKIDAR_INTERVAL=300",
   "cd /home/codefiddle/code",
   "npm install",
   "npm run dev",

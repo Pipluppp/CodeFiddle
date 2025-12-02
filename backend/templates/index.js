@@ -11,8 +11,6 @@ const withViteCommands = (label) => ({
   bootstrapDelayMs: 300,
   commands: [
     `echo "Bootstrapping ${label} template: installing dependencies and starting the dev server..."`,
-    "export CHOKIDAR_USEPOLLING=1",
-    "export CHOKIDAR_INTERVAL=300",
     `cd ${WORKDIR}`,
     "npm install",
     "npm run dev",
@@ -24,8 +22,6 @@ const withAngularCommands = (label) => ({
   bootstrapDelayMs: 300,
   commands: [
     `echo "Bootstrapping ${label} template: installing dependencies and starting the Angular dev server..."`,
-    "export CHOKIDAR_USEPOLLING=1",
-    "export CHOKIDAR_INTERVAL=300",
     `cd ${WORKDIR}`,
     "npm install",
     "npm run dev",

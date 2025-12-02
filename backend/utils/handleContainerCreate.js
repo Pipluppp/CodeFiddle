@@ -44,6 +44,8 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
     Env: [
       `VITE_HMR_HOST=${hmrHost}`,
       "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "CHOKIDAR_USEPOLLING=1",
+      "CHOKIDAR_INTERVAL=300",
     ],
     Volumes: {
       "/home/codefiddle/code": {},

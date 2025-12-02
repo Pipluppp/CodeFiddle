@@ -17,6 +17,7 @@ import activeTabStore from "../Store/activeTabStore";
 import portStore from "../Store/portStore";
 import createFileOrFolderStore from "../Store/createFileOrFolderStore";
 import { buildApiUrl } from "../utils/api";
+import availableTabsStore from "../Store/availableTabsStore";
 import { PlaygroundMetadata } from "../types/types";
 
 export const Playground = () => {
@@ -25,7 +26,9 @@ export const Playground = () => {
   
   // Stores
   const setFolderStructure = folderStructureStore((state) => state.setFolderStructure);
+  const folderStructure = folderStructureStore((state) => state.folderStructure);
   const setWs = websocketStore((state) => state.setWs);
+  const ws = websocketStore((state) => state.ws);
   const setActiveTab = activeTabStore((state) => state.setActiveTab);
   const setPort = portStore((state) => state.setPort);
   const setPortError = portStore((state) => state.setError);
@@ -33,9 +36,11 @@ export const Playground = () => {
   const portError = portStore((state) => state.error);
   const setPath = createFileOrFolderStore((state) => state.setPath);
   const setIsFile = createFileOrFolderStore((state) => state.setIsFile);
+  const addOrUpdateAvailableTabs = availableTabsStore((state) => state.addOrUpdateAvailableTabs);
 
   const [playgroundMeta, setPlaygroundMeta] = useState<PlaygroundMetadata | null>(null);
   const [shellReady, setShellReady] = useState(false);
+  const [readmeOpened, setReadmeOpened] = useState(false);
 
   // All side-effects (fetching, websockets) go in here.
   useEffect(() => {
@@ -54,6 +59,7 @@ export const Playground = () => {
 
       ws.onopen = () => {
         setWs(ws); // Save the websocket connection to the global store
+
         ws.onmessage = (msg) => {
           const data = JSON.parse(msg.data);
           switch (data.type) {
@@ -103,6 +109,23 @@ export const Playground = () => {
     setPortError,
     setWs,
   ]);
+
+  // Auto-open README.md when folder structure is loaded
+  useEffect(() => {
+    if (folderStructure && !readmeOpened && ws) {
+       console.log("Checking for README in:", folderStructure);
+       const readmeNode = folderStructure.children?.find(child => child.name.toLowerCase() === "readme.md");
+       if (readmeNode) {
+           console.log("Found README node:", readmeNode);
+           const path = readmeNode.path;
+           addOrUpdateAvailableTabs(path);
+           ws.send(JSON.stringify({ type: "readFile", payload: { path, data: null } }));
+           setReadmeOpened(true);
+       } else {
+           console.log("README not found in root children");
+       }
+    }
+  }, [folderStructure, readmeOpened, addOrUpdateAvailableTabs, ws]);
 
   useEffect(() => {
     if (!playgroundId) {

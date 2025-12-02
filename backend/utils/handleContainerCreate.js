@@ -46,6 +46,8 @@ const handleContainerCreate = (playgroundId, wsForShell, req, socket, head) => {
       "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
       "CHOKIDAR_USEPOLLING=1",
       "CHOKIDAR_INTERVAL=300",
+      "NPM_CONFIG_UPDATE_NOTIFIER=false",
+      "NPM_CONFIG_FUND=false",
     ],
     Volumes: {
       "/home/codefiddle/code": {},

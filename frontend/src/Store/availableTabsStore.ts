@@ -48,6 +48,7 @@ const availableTabsStore = create<AvailableTabsStoreState>()((set, get) => ({
     set({ availableTabs: newState });
     return null;
   },
+  clearAvailableTabs: () => set({ availableTabs: {} }),
 }));
 
 export default availableTabsStore;

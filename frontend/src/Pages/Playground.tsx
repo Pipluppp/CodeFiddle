@@ -30,6 +30,7 @@ export const Playground = () => {
   const setWs = websocketStore((state) => state.setWs);
   const ws = websocketStore((state) => state.ws);
   const setActiveTab = activeTabStore((state) => state.setActiveTab);
+  const clearActiveTab = activeTabStore((state) => state.clearActiveTab);
   const setPort = portStore((state) => state.setPort);
   const setPortError = portStore((state) => state.setError);
   const port = portStore((state) => state.port);
@@ -37,6 +38,7 @@ export const Playground = () => {
   const setPath = createFileOrFolderStore((state) => state.setPath);
   const setIsFile = createFileOrFolderStore((state) => state.setIsFile);
   const addOrUpdateAvailableTabs = availableTabsStore((state) => state.addOrUpdateAvailableTabs);
+  const clearAvailableTabs = availableTabsStore((state) => state.clearAvailableTabs);
 
   const [playgroundMeta, setPlaygroundMeta] = useState<PlaygroundMetadata | null>(null);
   const [shellReady, setShellReady] = useState(false);
@@ -49,6 +51,8 @@ export const Playground = () => {
       setShellReady(false);
       setPort(null);
       setPortError(null);
+      clearActiveTab();
+      clearAvailableTabs();
 
       // 1. Fetch the initial folder structure.
       setFolderStructure(playgroundId);

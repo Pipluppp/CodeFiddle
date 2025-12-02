@@ -33,6 +33,7 @@ export interface AvailableTabsStoreState {
   availableTabs: AvailableTabs;
   addOrUpdateAvailableTabs: (path: string) => void;
   removeTab: (path: string) => string | null;
+  clearAvailableTabs: () => void;
 }
 
 export interface FolderStructure {

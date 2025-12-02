@@ -10,8 +10,8 @@ This folder contains the Node.js starter used by CodeFiddle playgrounds. It foll
 
 ## Project structure
 
-- `index.js` boots a simple HTTP server and logs runtime details when it starts.
-- `package.json` exposes a single `start` script that uses the built-in `node --watch` flag.
+- [`index.js`](./index.js) boots a simple HTTP server and logs runtime details when it starts.
+- [`package.json`](./package.json) exposes a single `start` script that uses the built-in `node --watch` flag.
 
 ## Additional resources
 
